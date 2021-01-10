@@ -1,9 +1,9 @@
-site: Ultra
-url: https://example.com
-title: Ultra
-description: Ultra - Super fast Jekyll theme, weighs under 2kb
+site: Rohit Singh Asoliya
+url: https://asoliyarohit.github.io/
+title: Rohit Singh Asoliya
+description: Git profile
 twitter:
-  username: yourusername
+  username: asoliyarohit
   card: summary
 
 permalink: pretty
