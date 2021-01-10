@@ -7,9 +7,7 @@ title: About
 
 Learning by day. Learning by night too. My college prof once said, my life will be a mess. It still hurts but I'm trying to turn it around.
 
-Mail me [📧Email](asoliyarohit16@gmail.com "Love to talk!")
-<br></br>
-Or Connect with me [💼Linkedin](https://www.linkedin.com/in/rohit-singh-asoliya-8a846768/ "Lets talk with a lot of adjectives!")
+Connect with me [💼Linkedin](https://www.linkedin.com/in/rohit-singh-asoliya-8a846768/ "Lets talk with a lot of adjectives!")
 
 ### Key Skills
 
