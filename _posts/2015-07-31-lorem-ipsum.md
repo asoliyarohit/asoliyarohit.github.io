@@ -1,7 +1,14 @@
 ---
 layout: post
-title: Lorem Ipsum
-description: Lorem Ipsum
+title: New Beginnings 
+description: Let's start acting up!
 ---
 
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+It's been quite some since I have taken a real challenge in life. Strange. I never in my wildest dreams imagined this is what being an adult feels like. Time to struggle a lot.
+
+100 days of learn and blog it is. See you on the other side!
+
+
+Day - 0
+
+Cheers!
