@@ -3,19 +3,19 @@ layout: page
 title: About
 ---
 
-## Ultra - Super fast Jekyll theme 
+## This is Rohit, who is a very nice guy :)  
 
-Super fast, minimal one-column portfolio/blog theme built for Jekyll. Theme weighs under <strong>2kb</strong>. Perfect for your personal website, blog and portfolio.
+Learning by day. Learning by night too. My college prof once said, my life will be a mess. It still hurts but I'm trying to turn it around.
 
-### Key features
+### Key Skills
 
-- seo optimized
-- weighs under 2kb
-- portfolio/blog pages
-- AAA, 100/100 scores on Lighthouse, Gmetrix and Webpagetest
-- responsive
-- inline css
-- compressed css, html
-- sitemap
-- robots.txt
-- atom feed
+- SQL - <strong> Advance </strong> 
+- HQL - <strong> Advance </strong>
+- R programming - <strong> Advance </strong> 
+- Pyhton - <strong> Intermediate </strong>
+- SparkR (Bigdaddy of R) - <strong> Intermediate </strong>
+- Pyspark (Bigdaddy of Python) - <strong> Intermediate </strong>
+- Tableau - <strong> Advance </strong>
+- Statistics - <strong> Advance </strong>
+- Programmatic Advertising Concepts - <strong> Advance </strong>
+- Social Media Marketing - <strong> Intermediate </strong>
