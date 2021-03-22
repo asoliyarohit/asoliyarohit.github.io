@@ -3,7 +3,7 @@ layout: project
 title: 100 Project Goal - 1
 description: So here I'm gonna write up all the projects that I undertake as a part of this inttiative
 summary: This is a beginner level ETL project
-category: Python, Beginner, ETL
+category: [Python, Beginner, ETL]
 ---
 
 TL;DR - I was bored and googled 100 DS projects and landed up on this [medium article](https://amankharwal.medium.com/100-machine-learning-projects-aff22b22dd6e) by Aman Kharwal. So just gonna do all the projects he did.
