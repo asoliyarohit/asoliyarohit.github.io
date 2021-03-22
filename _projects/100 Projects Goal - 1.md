@@ -36,7 +36,7 @@ print(raw_data.head())
 
 ```
 output: 
-![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/eea3dafc3052002de61addf501f8a20a761e3188/Project%201%20-%20US%20president%20heights/Sample%20head.JPG)
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/eea3dafc3052002de61addf501f8a20a761e3188/Project%201%20-%20US%20president%20heights/Sample%20head.JPG?raw=true)
 
 ```
 
@@ -47,7 +47,7 @@ print(height)
 
 ```
 output: 
-![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/array_of_height.JPG)
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/array_of_height.JPG?raw=true)
 
 
 ```
@@ -65,7 +65,7 @@ print("75th percentile =", np.percentile(height, 75))
 ```
 
 output: 
-![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_stat.JPG)
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_stat.JPG?raw=true)
 
 
 ```
