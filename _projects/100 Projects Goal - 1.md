@@ -6,10 +6,10 @@ summary: This is a beginner level ETL project
 category: Python, Beginner, ETL
 ---
 
-TL;DR - I was bored and googled 100 DS projects and landed up on this medium article {https://amankharwal.medium.com/100-machine-learning-projects-aff22b22dd6e} by Aman Kharwal. So just gonna do all the projects he did.
+TL;DR - I was bored and googled 100 DS projects and landed up on this [medium article](https://amankharwal.medium.com/100-machine-learning-projects-aff22b22dd6e) by Aman Kharwal. So just gonna do all the projects he did.
 
 
-So the first one is President Height Analysis, pretty basic liked doing it.
+The first one is President Height Analysis, pretty basic liked doing it.
 
 
 Let's load the data, go ahead download the file from [here](https://github.com/asoliyarohit/100-DS-project-exercise/blob/3e54408648e28c87e7342488f30e07d07dc2d841/Project%201%20-%20US%20president%20heights/president_heights.csv)
@@ -36,7 +36,7 @@ print(raw_data.head())
 
 ```
 output: 
-![alt text](https://github.com/asoliyarohit/100-DS-project-exercise/blob/eea3dafc3052002de61addf501f8a20a761e3188/Project%201%20-%20US%20president%20heights/Sample%20head.JPG "Output")
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/eea3dafc3052002de61addf501f8a20a761e3188/Project%201%20-%20US%20president%20heights/Sample%20head.JPG)
 
 ```
 
@@ -47,7 +47,7 @@ print(height)
 
 ```
 output: 
-![alt text](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/array_of_height.JPG "Output")
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/array_of_height.JPG)
 
 
 ```
@@ -65,7 +65,7 @@ print("75th percentile =", np.percentile(height, 75))
 ```
 
 output: 
-![alt text](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_stat.JPG "Output")
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_stat.JPG)
 
 
 ```
@@ -76,7 +76,7 @@ raw_data.describe().transpose()
 ```
 
 output: 
-![alt text](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_describe.JPG "Output")
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_describe.JPG)
 
 
 ```
@@ -95,7 +95,7 @@ plt.show()
 ```
 
 output: 
-![alt text](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/plotted_map.JPG "Output")
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/plotted_map.JPG)
 
 
 Some concluding remarks:
@@ -104,8 +104,7 @@ Some concluding remarks:
 #####average height is shy of 180cm
 
 
-Find the jupyter notebook here: 
-![alt text](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/presidentHeights_exercise.ipynb "Notebook")
+Find the jupyter notebook here: [IPYNB](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/presidentHeights_exercise.ipynb)
 
 
 
