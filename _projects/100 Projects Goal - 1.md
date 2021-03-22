@@ -76,7 +76,7 @@ raw_data.describe().transpose()
 ```
 
 output: 
-![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_describe.JPG)
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_describe.JPG?raw=true)
 
 
 ```
@@ -95,13 +95,13 @@ plt.show()
 ```
 
 output: 
-![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/plotted_map.JPG)
+![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/plotted_map.JPG?raw=true)
 
 
 Some concluding remarks:
 
-#####75% of the presidents have a height below the 183cm mark
-#####average height is shy of 180cm
+#75% of the presidents have a height below the 183cm mark
+#average height is shy of 180cm
 
 
 Find the jupyter notebook here: [IPYNB](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/presidentHeights_exercise.ipynb)
