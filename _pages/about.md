@@ -3,7 +3,7 @@ layout: page
 title: About
 ---
 
-## This is Rohit, who is a very nice guy :)  
+## This is Rohit 
 
 Learning by day. Learning by night too. My college prof once said, my life will be a mess. It still hurts but I'm trying to turn it around.
 
