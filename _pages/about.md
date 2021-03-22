@@ -5,7 +5,7 @@ title: About
 
 ## This is Rohit 
 
-Learning by day. Learning by night too. My college prof once said, my life will be a mess. It still hurts but I'm trying to turn it around.
+Learning by day. Learning by night too. I'm trying to turn things around one small step at a time.
 
 Connect with me [💼Linkedin](https://www.linkedin.com/in/rohit-singh-asoliya-8a846768/ "Lets talk with a lot of adjectives!")
 
