@@ -16,7 +16,7 @@ A tabular data structure where columns are called series and consists of lists o
 
 #### Reading a dataframe, just use pandas
 
-```
+```python
 raw_data = pd.read_csv ('/location.csv'), na_values = ';' , usecols = ['col1','col2','col3']
 
 edu
@@ -25,7 +25,7 @@ na_values specifies the character that represents "non available data" in the fi
 
 
 #### Viewing data:
-```
+```python
 raw_data.head()
 raw_data.tail()
 raw_data.columns
@@ -36,7 +36,7 @@ raw_data.describe()
 
 #### Selection:
 
-```
+```python
 #select the columns
 raw_data['col1']
 #select the rows
@@ -46,7 +46,7 @@ raw_data[10:16]
 
 #### Filtering
 
-```
+```python
 #all you have to do is what boolean index should it pick up
 
 raw_data['col1'] >= 10  # this will specify(mask) every value in series col1 as true and false
@@ -62,7 +62,7 @@ raw_data[raw_data['col1'].isnull()]
 
 Pandas has a bunch of inbuilt functions that can be used
 
-```
+```python
 
 count()	#Number of non-null observations
 sum()	#Sum of values
@@ -78,7 +78,7 @@ var()	#Unbiased variance
 
 #### Lambda (𝜆) Function
 
-```
+```python
 s = raw_data['col1'].apply(lambda d: d**2)
 s.head() #gives square of each value in the col1
 
@@ -86,7 +86,7 @@ s.head() #gives square of each value in the col1
 
 #### Drop & Append & Sort
 
-```
+```python
 append({dictionary of new row},ignore_index=True) #set the ignore_index flag in the append method to True, otherwise the index 0 is given to this new row, what will produce an error if it already exists
 
 drop()
@@ -97,13 +97,13 @@ sort_values(by = 'col1',ascending = True, inplace= True)
 
 #### Group By
 
-```
+```python
 group = raw_data[['Col1', 'Value']].groupby('col1').mean()
 
 ```
 
 #### Pivot Table
-```
+```python
 pivoted_data = pd.pivot_table(raw_data, values='Value',
                         index=['Col1'], columns=['col2'])
 

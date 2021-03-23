@@ -18,7 +18,7 @@ Let's load the data, go ahead download the file from [here](https://github.com/a
 let's jump into analysing it.
 
 
-```
+```python
 #loading the required modules
 
 import numpy as np
@@ -38,7 +38,7 @@ print(raw_data.head())
 output: 
 ![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/eea3dafc3052002de61addf501f8a20a761e3188/Project%201%20-%20US%20president%20heights/Sample%20head.JPG?raw=true)
 
-```
+```python
 
 # lets look at all the values height column takes
 
@@ -50,7 +50,7 @@ output:
 ![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/array_of_height.JPG?raw=true)
 
 
-```
+```python
 
 #let's calculate summary stats
 
@@ -68,7 +68,7 @@ output:
 ![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_stat.JPG?raw=true)
 
 
-```
+```python
 #or simply use this 
 
 raw_data.describe().transpose()
@@ -79,7 +79,7 @@ output:
 ![image](https://github.com/asoliyarohit/100-DS-project-exercise/blob/6a66f3f5ebf54752dfb8985875133dc96774a98d/Project%201%20-%20US%20president%20heights/sample_describe.JPG?raw=true)
 
 
-```
+```python
 #let's plot some map
 
 import matplotlib.pyplot as plt
