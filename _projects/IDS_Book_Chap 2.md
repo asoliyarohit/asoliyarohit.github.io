@@ -3,10 +3,10 @@ layout: project
 title: Book Chap 2: Toolboxes for DS 
 description: So here I'm gonna write up all that I learn from the book
 summary: Chapter 2 of the book
-category: Python, Beginner, ETL
+category:  Python, Beginner, ETL
 ---
 
-TL;DR - Summarizing the book Intro to DS
+TL;DR - Summarizing the book Intro to DS chapter 2
 
 
 First thing that I learnt:
