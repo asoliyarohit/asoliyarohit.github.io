@@ -1,6 +1,6 @@
 ---
 layout: project
-title: Book Chap 2: Toolboxes for DS 
+title: Book Chap 2 Toolboxes for DS 
 description: So here I'm gonna write up all that I learn from the book
 summary: Chapter 2 of the book
 category:  Python, Beginner, ETL
