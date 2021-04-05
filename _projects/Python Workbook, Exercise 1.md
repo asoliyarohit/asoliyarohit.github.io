@@ -17,7 +17,7 @@ familiar with Python’s syntax."
 
 For today,
 
-> Exercise 1: Mailing Address
+> Exercise 1: Mailing Address 
 > Create a program that displays your name and complete mailing address formatted in
 > the manner that you would usually see it on the outside of an envelope. Your program
 > does not need to read any input from the user.
@@ -38,7 +38,7 @@ print("Telephone: 1234567891")
 
 ```
 output: 
-![image](https://github.com/asoliyarohit/python-workbook-exercises/blob/7af0cc45ccd2950249f35fa35c050ff41bf81818/exercise%201/Output1.JPG)
+![image](https://github.com/asoliyarohit/python-workbook-exercises/blob/7af0cc45ccd2950249f35fa35c050ff41bf81818/exercise%201/Output1.JPG?raw=true)
 
 
 
