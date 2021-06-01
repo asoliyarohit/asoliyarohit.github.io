@@ -76,7 +76,7 @@ There are certain easy aspects of data cleaning that have been highlighted:
 
 sample mean is the sum of the values divided by the number of values:
 
-$$ \mu = \frac{1}{n} \sum_i x_i$$
+$$ \mu = \frac{1}{n} \sum_i x_i $$
 
 It describes the central tendency of a sample. Easily affected by outliers as visible.
 
