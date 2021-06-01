@@ -16,12 +16,12 @@ Descriptive statistics is all about the concepts, terms, measures and tools that
 
 
 ### Main Principles:
-- A *population* is a collection of objects, items (“units”) about which information is sought.
-- A *sample* is a subset of that target population
+- A **population** is a collection of objects, items (“units”) about which information is sought.
+- A **sample** is a subset of that target population
 
 
 #### The Adult income data set:
-*Problem Statement:* Are the men more likely to become high income professionals i.e. to receive income bigger than 50K?
+**Problem Statement:** Are the men more likely to become high income professionals i.e. to receive income bigger than 50K?
 
 We need to perform some data analysis into this to find any merit in the argument. It could be false for a variety of reasons, including but not limited to:
 
@@ -50,24 +50,24 @@ then looked at the group by country and age. Further seperated the data set into
 
 #### Part 1.4 Data Cleaning:
 There are certain easy aspects of data cleaning that have been highlighted:
-- *Sample the data:* If the amount of raw data is huge, processing all of them may require an extensive amount of processing power which may not be practical. Sample and reduce the size
+- **Sample the data:** If the amount of raw data is huge, processing all of them may require an extensive amount of processing power which may not be practical. Sample and reduce the size
 
-- *Impute missing data:* It is quite common that some of the input records are incomplete in the sense that certain fields are missing or have input error. In a typical tabular data format, we need to validate each record contains the same number of fields and each field contains the data type we expect. In case the record has some fields missing, we have the following choices:
+- **Impute missing data:** It is quite common that some of the input records are incomplete in the sense that certain fields are missing or have input error. In a typical tabular data format, we need to validate each record contains the same number of fields and each field contains the data type we expect. In case the record has some fields missing, we have the following choices:
 
 (a) Discard the whole record if it is incomplete;
 (b) Infer the missing value based on the data from other records. A common approach is to fill the missing data with the average, or the median.
 
-- *Normalize numeric value:* Normalize data is about transforming numeric data into a uniform range.
+- **Normalize numeric value:** Normalize data is about transforming numeric data into a uniform range.
 
-- *Reduce dimensionality:* High dimensionality can be a problem for some machine learning methods. There are two ways to reduce the number of input features. One is about _removing irrelevant_ input variables, another one is about _removing redundant_ input variables.
+- **Reduce dimensionality:** High dimensionality can be a problem for some machine learning methods. There are two ways to reduce the number of input features. One is about _removing irrelevant_ input variables, another one is about _removing redundant_ input variables.
 
-- *Add derived features:* In some cases, we may need to compute additional attributes from existing attributes (f.e. converting a geo-location to a zip code, or converting the age to an age group).
+- **Add derived features:** In some cases, we may need to compute additional attributes from existing attributes (f.e. converting a geo-location to a zip code, or converting the age to an age group).
 
-- *Discretize numeric value into categories:*  Discretize data is about cutting a continuous value into ranges and assigning the numeric with the corresponding bucket of the range it falls on. Binningggggggggggggg!
+- **Discretize numeric value into categories:**  Discretize data is about cutting a continuous value into ranges and assigning the numeric with the corresponding bucket of the range it falls on. Binningggggggggggggg!
 
-- *Binarize categorical attributes:* Certain machine learning models only take binary input (or numeric input). In this case, we need to convert categorical attribute into multiple binary attributes, while each binary attribute corresponds to a particular value of the category.
+- **Binarize categorical attributes:** Certain machine learning models only take binary input (or numeric input). In this case, we need to convert categorical attribute into multiple binary attributes, while each binary attribute corresponds to a particular value of the category.
 
-- *Select, combine, aggregate data:* Designing the form of training data is the most important part of the whole predictive modeling exercise because the accuracy largely depends on whether the input features are structured in an appropriate form that provide strong signals to the learning algorithm. Rather than using the raw data as it is, it is quite common that multiple pieces of raw data need to be combined together, or aggregating multiple raw data records along some dimensions.
+- **Select, combine, aggregate data:** Designing the form of training data is the most important part of the whole predictive modeling exercise because the accuracy largely depends on whether the input features are structured in an appropriate form that provide strong signals to the learning algorithm. Rather than using the raw data as it is, it is quite common that multiple pieces of raw data need to be combined together, or aggregating multiple raw data records along some dimensions.
 
 
 ### EDA
@@ -100,9 +100,9 @@ most common representation of a distribution is a histogram. more like a frequen
 
 Oh wait why data distribution? Basically all this numbers can sometimes be misleading like a bad ex, its important to understand the entire scenario much better by looking at the distributions.
 
-We can calculate the *Probability Mass Function (PMF)* by divding the frequency of the histograms by number of samples.
+We can calculate the **Probability Mass Function (PMF)** by divding the frequency of the histograms by number of samples.
 
-We can also calculate the *Cumulative Distribution Function (CDF)*, or just *distribution function*, that describes the probability that a real-valued random variable X with a given probability distribution will be found to have a value less than or equal to X.
+We can also calculate the **Cumulative Distribution Function (CDF)**, or just *distribution function*, that describes the probability that a real-valued random variable X with a given probability distribution will be found to have a value less than or equal to X.
 
 
 This is all that I completed as of 1st June, will update the rest tomorrow.
