@@ -3,21 +3,12 @@ layout: page
 title: About
 ---
 
-## This is Rohit 
+## Greetings!  
 
-Learning by day. Learning by night too. I'm trying to turn things around one small step at a time.
+Thankyou for dropping by and trying to know more on me. 
 
-Connect with me [💼Linkedin](https://www.linkedin.com/in/rohit-singh-asoliya-8a846768/ "Lets talk with a lot of adjectives!")
+Well I am a curious soul who's learning to be a creator in this world of consumerism.
 
-### Key Skills
+Connect with me [💼Linkedin](https://www.linkedin.com/in/rohit-singh-asoliya-8a846768/ "Lets talk!")
 
-- SQL - <strong> Advance </strong> 
-- HQL - <strong> Advance </strong>
-- R programming - <strong> Advance </strong> 
-- Pyhton - <strong> Intermediate </strong>
-- SparkR (Bigdaddy of R) - <strong> Intermediate </strong>
-- Pyspark (Bigdaddy of Python) - <strong> Intermediate </strong>
-- Tableau - <strong> Advance </strong>
-- Statistics - <strong> Advance </strong>
-- Programmatic Advertising Concepts - <strong> Advance </strong>
-- Social Media Marketing - <strong> Intermediate </strong>
+
