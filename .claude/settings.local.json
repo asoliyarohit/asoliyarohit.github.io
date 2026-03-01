@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"c:\\\\Users\\\\hp\\\\Documents\\\\GitHub\\\\asoliyarohit.github.io\\\\src\\\\index.css\":*)",
+      "Bash(\"c:\\\\Users\\\\hp\\\\Documents\\\\GitHub\\\\asoliyarohit.github.io\\\\src\\\\data\\\\content.js\":*)",
+      "Bash(npm install)"
+    ]
+  }
+}

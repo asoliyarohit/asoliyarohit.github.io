@@ -1,66 +1,45 @@
 import { useEffect } from 'react'
 
-const NUM_DOTS = 10
-
 export default function CursorTrail() {
   useEffect(() => {
-    // Skip on touch devices
     if (window.matchMedia('(pointer: coarse)').matches) return
 
+    const N = 8
     const dots = []
-    const positions = Array.from({ length: NUM_DOTS }, () => ({ x: -100, y: -100 }))
+    const pos  = Array.from({ length: N }, () => ({ x: -200, y: -200 }))
+    let mx = -200, my = -200
 
-    // Create trail dots
-    for (let i = 0; i < NUM_DOTS; i++) {
+    for (let i = 0; i < N; i++) {
+      const size = Math.max(2, 10 - i * 1.1)
       const el = document.createElement('div')
-      const size = Math.max(2, 10 - i)
       el.className = 'cursor-dot'
-      el.style.cssText = `
-        width: ${size}px;
-        height: ${size}px;
-        background: ${i < 4 ? '#D4AF37' : '#FF6B2C'};
-        opacity: ${(1 - i / NUM_DOTS) * 0.8};
-      `
+      el.style.cssText = `width:${size}px;height:${size}px;background:${i < 3 ? '#00ff41' : '#00d4ff'};opacity:${(1 - i / N) * 0.75};`
       document.body.appendChild(el)
       dots.push(el)
     }
 
-    let mouseX = -100
-    let mouseY = -100
+    const onMove = e => { mx = e.clientX; my = e.clientY }
+    window.addEventListener('mousemove', onMove, { passive: true })
 
-    const onMouseMove = (e) => {
-      mouseX = e.clientX
-      mouseY = e.clientY
-    }
-
-    let rafId
-    const animate = () => {
-      // First dot follows mouse directly
-      positions[0].x += (mouseX - positions[0].x) * 0.35
-      positions[0].y += (mouseY - positions[0].y) * 0.35
-
-      // Each subsequent dot trails the previous
-      for (let i = 1; i < NUM_DOTS; i++) {
-        positions[i].x += (positions[i - 1].x - positions[i].x) * 0.4
-        positions[i].y += (positions[i - 1].y - positions[i].y) * 0.4
+    let raf
+    const tick = () => {
+      pos[0].x += (mx - pos[0].x) * 0.38
+      pos[0].y += (my - pos[0].y) * 0.38
+      for (let i = 1; i < N; i++) {
+        pos[i].x += (pos[i-1].x - pos[i].x) * 0.42
+        pos[i].y += (pos[i-1].y - pos[i].y) * 0.42
       }
-
-      dots.forEach((dot, i) => {
-        const hw = dot.offsetWidth / 2
-        const hh = dot.offsetHeight / 2
-        dot.style.transform = `translate(${positions[i].x - hw}px, ${positions[i].y - hh}px)`
+      dots.forEach((d, i) => {
+        d.style.transform = `translate(${pos[i].x - d.offsetWidth / 2}px,${pos[i].y - d.offsetHeight / 2}px)`
       })
-
-      rafId = requestAnimationFrame(animate)
+      raf = requestAnimationFrame(tick)
     }
-
-    window.addEventListener('mousemove', onMouseMove, { passive: true })
-    animate()
+    tick()
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove)
-      cancelAnimationFrame(rafId)
-      dots.forEach((el) => { if (el.parentNode) el.parentNode.removeChild(el) })
+      window.removeEventListener('mousemove', onMove)
+      cancelAnimationFrame(raf)
+      dots.forEach(d => d.parentNode?.removeChild(d))
     }
   }, [])
 
