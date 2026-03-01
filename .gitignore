@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
 
+# Old Vite build output (not used for GitHub Pages)
+dist/
 
 # Vite
 .vite/
