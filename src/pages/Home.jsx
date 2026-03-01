@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { about } from '../data/content'
+import { about, stats } from '../data/loader'
 
 /* ---- Typewriter hook ---- */
 function useTypewriter(words, speed = 80, pause = 1800) {
@@ -160,7 +160,7 @@ export default function Home() {
 
           {/* Stats strip */}
           <div ref={statsRef} className="hero-stats">
-            {about.stats.map(s => (
+            {stats.map(s => (
               <StatCounter key={s.label} value={s.value} suffix={s.suffix} label={s.label} vis={statsVis} />
             ))}
           </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { learnings } from '../data/content'
+import { learnings } from '../data/loader'
 
 const CAT_COLORS = { 'Data Science': 'tag-cyan', Statistics: 'tag-purple', Python: '', Growth: 'tag-amber', Tools: '' }
 const ALL_CATS = ['All', ...Array.from(new Set(learnings.map(l => l.category)))]

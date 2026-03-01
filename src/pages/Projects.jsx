@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { projects } from '../data/content'
+import { projects } from '../data/loader'
 
 const ICONS = { 'Data Analysis': '📊', 'Learning Project': '📖', Practice: '⚙️' }
 const CATS  = ['All', ...Array.from(new Set(projects.map(p => p.category)))]

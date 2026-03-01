@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { about } from '../data/content'
+import { about } from '../data/loader'
 
 const NAV = [
   { label: 'Home',          path: '/' },

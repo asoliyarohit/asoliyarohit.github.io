@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { contributions, about } from '../data/content'
+import { about } from '../data/loader'
+import { contributions } from '../data/loader'
 
 function useReveal() {
   const ref = useRef(null); const [vis, setVis] = useState(false)
