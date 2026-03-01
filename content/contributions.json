@@ -1,0 +1,42 @@
+{
+  "openSource": [
+    {
+      "title": "Personal Portfolio Website",
+      "status": "active",
+      "org": "asoliyarohit.github.io",
+      "desc": "Built and maintain this open personal website — documenting learnings, projects, and the journey from beginner to practitioner.",
+      "date": "2024 – Present"
+    },
+    {
+      "title": "Scouting Data Science Repos",
+      "status": "planned",
+      "org": "GitHub",
+      "desc": "Exploring open source data science projects — Pandas, NumPy, beginner-friendly repos tagged \"good first issue\".",
+      "date": "Q4 2024"
+    },
+    {
+      "title": "Documentation Contribution",
+      "status": "planned",
+      "org": "Open Source",
+      "desc": "Planning to improve documentation for a Python data science library — README clarity, adding examples, fixing outdated content.",
+      "date": "2025"
+    }
+  ],
+  "availableFor": [
+    {
+      "title": "Data Analysis Consulting",
+      "desc": "Available for small data analysis projects — EDA, cleaning messy datasets, generating insights from structured data.",
+      "tech": ["Python", "Pandas", "EDA", "Visualization"]
+    },
+    {
+      "title": "Python Scripting & Automation",
+      "desc": "Can help automate repetitive data tasks, build simple ETL pipelines, or write Python scripts to process and transform data files.",
+      "tech": ["Python", "ETL", "Automation"]
+    },
+    {
+      "title": "Learning Mentorship",
+      "desc": "Happy to guide beginners on Python and data science — explaining concepts, reviewing code, or suggesting learning paths.",
+      "tech": ["Teaching", "Python", "Data Science"]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "hero": {
+    "roles": ["Staff Data Analyst", "Curious Learner", "Problem Solver"],
+    "bio": "On a joyful autopilot with curiosity. Turning raw numbers into insight, one commit at a time."
+  },
+  "paragraphs": [
+    "Hi — I'm Rohit. I navigate the world of data with enthusiasm and a learner's spirit. Whether it's wrangling datasets, building ETL pipelines, or diving into statistics, I find joy in turning raw numbers into insight.",
+    "Currently on a 100-day challenge — pushing myself academically, physically, and creatively. Every day is a new commit in the story of becoming better."
+  ],
+  "links": [
+    { "label": "GitHub",   "href": "https://github.com/asoliyarohit",          "external": true  },
+    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/asoliyarohit", "external": true  },
+    { "label": "Twitter",  "href": "https://twitter.com/asoliyarohit",          "external": true  },
+    { "label": "Email",    "href": "mailto:asoliyarohit@gmail.com",             "external": false }
+  ],
+  "stats": [
+    { "target": 4,   "label": "Projects"      },
+    { "target": 5,   "label": "Learnings"     },
+    { "target": 3,   "label": "Books Read"    },
+    { "target": 100, "label": "Day Challenge" }
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  { "name": "SQL",           "level": 68 },
+  { "name": "Data Viz",      "level": 65 },
+  { "name": "Statistics",    "level": 62 },
+  { "name": "ETL Pipelines", "level": 60 },
+  { "name": "Git & GitHub",  "level": 60 },
+  { "name": "PySpark",       "level": 58 }
+]

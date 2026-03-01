@@ -1,0 +1,54 @@
+[
+  {
+    "tag": "Data Analysis",
+    "status": "done",
+    "title": "US President Heights Analysis",
+    "desc": "An ETL project analyzing heights of all US Presidents. Extracted from CSV, transformed with Pandas, and computed descriptive statistics.",
+    "highlights": [
+      "ETL pipeline: Extract → Transform → Load",
+      "Computed mean, median, min, max height",
+      "Visualized distribution with Matplotlib"
+    ],
+    "tech": ["Python", "Pandas", "NumPy", "Matplotlib"],
+    "link": "https://github.com/asoliyarohit"
+  },
+  {
+    "tag": "Learning Project",
+    "status": "done",
+    "title": "IDS Book: Chapter 2 Practice",
+    "desc": "Hands-on practice — built real DataFrames, applied groupby, pivot tables, and lambda transforms.",
+    "highlights": [
+      "Built DataFrames from scratch",
+      "Mastered groupby and agg functions",
+      "Applied pivot tables for summary analysis"
+    ],
+    "tech": ["Python", "Pandas", "ETL"],
+    "link": "https://github.com/asoliyarohit"
+  },
+  {
+    "tag": "Learning Project",
+    "status": "done",
+    "title": "IDS Book: Chapter 3 Practice",
+    "desc": "Applied descriptive statistics — data cleaning, histograms, CDFs, and PMFs.",
+    "highlights": [
+      "Descriptive stats with Pandas describe()",
+      "Plotted histograms and frequency tables",
+      "Computed CDF/PMF for distributions"
+    ],
+    "tech": ["Python", "Statistics", "Matplotlib"],
+    "link": "https://github.com/asoliyarohit"
+  },
+  {
+    "tag": "Practice",
+    "status": "wip",
+    "title": "Python Workbook: 100 Exercises",
+    "desc": "Working through a curated Python workbook — from string manipulation to functions and file I/O.",
+    "highlights": [
+      "String formatting and manipulation",
+      "List comprehensions and iteration",
+      "Function definitions and scope"
+    ],
+    "tech": ["Python", "Problem Solving"],
+    "link": "https://github.com/asoliyarohit"
+  }
+]

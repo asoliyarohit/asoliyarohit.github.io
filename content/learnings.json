@@ -1,0 +1,62 @@
+[
+  {
+    "tag": "Data Science",
+    "title": "IDS Book — Ch.2: Toolboxes for Data Science",
+    "summary": "Explored key Python toolboxes — mastered DataFrame operations, filtering, groupby, pivot tables, and lambda functions.",
+    "date": "Aug 15, 2024",
+    "highlights": [
+      "DataFrame creation and manipulation with Pandas",
+      "Data filtering using boolean indexing",
+      "GroupBy aggregations and pivot tables",
+      "Lambda functions for data transformation",
+      "Merging and joining datasets"
+    ]
+  },
+  {
+    "tag": "Statistics",
+    "title": "IDS Book — Ch.3: Descriptive Statistics",
+    "summary": "Deep dive into descriptive statistics — mean, median, variance, CDFs, PMFs, and exploratory data analysis.",
+    "date": "Aug 20, 2024",
+    "highlights": [
+      "Measures of central tendency (mean, median, mode)",
+      "Spread — variance, standard deviation, IQR",
+      "Histograms and frequency distributions",
+      "CDF and PMF for probability analysis",
+      "Data cleaning for outlier handling"
+    ]
+  },
+  {
+    "tag": "Python",
+    "title": "Python Workbook — Exercise 1",
+    "summary": "First Python workbook exercise — printing formatted mailing addresses using string operations.",
+    "date": "Jul 1, 2024",
+    "highlights": [
+      "String formatting in Python",
+      "Print function with multiple arguments",
+      "Variable assignment and data types"
+    ]
+  },
+  {
+    "tag": "Growth",
+    "title": "100-Day Challenge: Day 0 — Ignition",
+    "summary": "Kickstarted a 100-day personal challenge covering academics, health, and creativity.",
+    "date": "Sep 22, 2024",
+    "highlights": [
+      "Set clear academic goals for 100 days",
+      "Established daily exercise routine",
+      "Committed to daily learning entries"
+    ]
+  },
+  {
+    "tag": "Tools",
+    "title": "Git & GitHub Fundamentals",
+    "summary": "Learned version control fundamentals — branching, committing, pull requests, and collaborative workflows.",
+    "date": "Jun 15, 2024",
+    "highlights": [
+      "Core git commands (init, add, commit, push, pull)",
+      "Branching and merging strategies",
+      "Pull request workflow",
+      "Resolving merge conflicts"
+    ]
+  }
+]
