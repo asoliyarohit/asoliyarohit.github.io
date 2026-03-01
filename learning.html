@@ -3,19 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rohit Singh Asoliya</title>
-  <meta name="description" content="Rohit Singh Asoliya — Staff Data Analyst. Building, learning, and shipping." />
+  <title>Learning — Rohit Singh Asoliya</title>
+  <meta name="description" content="Learning log by Rohit Singh Asoliya — data science, Python, statistics, and tools." />
   <meta name="theme-color" content="#00ff41" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body data-page="home">
+<body data-page="learning">
 
 <canvas id="matrix-canvas"></canvas>
 
-<!-- NAV -->
 <nav id="navbar">
   <a href="index.html" class="nav-logo">RSA<span class="blink">_</span></a>
   <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
@@ -29,41 +28,15 @@
   </ul>
 </nav>
 
-<!-- HOME -->
-<section id="home">
-  <div class="hero-inner">
-    <div class="term-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="term-title">rohit@portfolio ~ %</span></div>
-    <div class="hero-body">
-      <p class="hero-comment">// Staff Data Analyst &amp; Curious Learner</p>
-      <h1 class="hero-name">Rohit Singh<br/><span class="green">Asoliya</span></h1>
-      <div class="typewriter-wrap">
-        <span class="tw-prefix">&gt; </span><span id="typewriter"></span><span class="cursor">|</span>
-      </div>
-      <p class="hero-bio"><!-- filled by content/about.json --></p>
-      <div class="hero-btns">
-        <a href="projects.html" class="btn-primary">View Projects</a>
-        <a href="https://github.com/asoliyarohit" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
-      </div>
+<main>
+  <section id="learning" style="background:var(--surf)">
+    <div class="container">
+      <h2 class="section-title"><span class="cyan">04.</span> Learning</h2>
+      <div class="learning-list"><!-- filled by content/learnings.json --></div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="container">
-    <h2 class="section-title"><span class="cyan">02.</span> About</h2>
-    <div class="about-grid">
-      <div class="about-text"><!-- filled by content/about.json --></div>
-      <div class="skills-col">
-        <h3 class="skills-heading">// Skills</h3>
-        <div class="skill-list"><!-- filled by content/skills.json --></div>
-      </div>
-    </div>
-    <div class="stats-row"><!-- filled by content/about.json --></div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <span class="footer-code"><span class="cyan">const</span> <span class="green">rohit</span> = { building: <span class="cyan">true</span>, learning: <span class="cyan">true</span> };</span>
