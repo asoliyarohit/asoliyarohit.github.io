@@ -5,12 +5,17 @@ import { books } from '../data/loader'
 const STATUS_FILTERS = ['All', 'reading', 'completed', 'want-to-read']
 const STATUS_LABEL   = { reading: 'Reading', completed: 'Completed', 'want-to-read': 'Want to Read' }
 
-function useReveal() {
-  const ref = useRef(null); const [vis, setVis] = useState(false)
+function useReveal(threshold = 0.08) {
+  const ref = useRef(null)
+  const [vis, setVis] = useState(false)
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVis(true); obs.disconnect() } }, { threshold: 0.08 })
-    if (ref.current) obs.observe(ref.current); return () => obs.disconnect()
-  }, [])
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVis(true); obs.disconnect() } },
+      { threshold }
+    )
+    if (ref.current) obs.observe(ref.current)
+    return () => obs.disconnect()
+  }, [threshold])
   return [ref, vis]
 }
 
@@ -25,29 +30,34 @@ function Stars({ rating }) {
   )
 }
 
-/* Book page — forwardRef required by react-pageflip */
+/* ── react-pageflip requires forwardRef on page elements ── */
 const BookPage = React.forwardRef(function BookPage({ children, className }, ref) {
   return <div ref={ref} className={`bp${className ? ' ' + className : ''}`}>{children}</div>
 })
 
-/* Book modal with realistic page-flip */
+/* ── Full-screen flip-book modal ── */
 function BookModal({ book, onClose }) {
   const flipRef = useRef(null)
+  const badgeClass = book.status === 'reading' ? 'badge-reading'
+                   : book.status === 'completed' ? 'badge-done'
+                   : 'badge-want'
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden'
     const onKey = e => {
       if (e.key === 'Escape')     onClose()
       if (e.key === 'ArrowRight') flipRef.current?.pageFlip().flipNext()
       if (e.key === 'ArrowLeft')  flipRef.current?.pageFlip().flipPrev()
     }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
   }, [onClose])
 
-  const badgeClass = book.status === 'reading' ? 'badge-reading' : book.status === 'completed' ? 'badge-done' : 'badge-want'
-
   return (
-    <div className="book-overlay" onClick={onClose} role="dialog" aria-modal="true">
+    <div className="book-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={`${book.title} by ${book.author}`}>
       <div className="book-modal-wrap" onClick={e => e.stopPropagation()}>
         <button className="book-modal-x" onClick={onClose} aria-label="Close">{'✕ close'}</button>
 
@@ -67,7 +77,7 @@ function BookModal({ book, onClose }) {
             mobileScrollSupport={false}
             className="the-flip-book"
           >
-            {/* Page 1: Front cover */}
+            {/* Page 1 — Front cover */}
             <BookPage className="bp-cover">
               <div className="bp-cover-inner" style={{ background: `linear-gradient(160deg, ${book.spine} 0%, ${book.accent}55 100%)` }}>
                 <div className="bp-cover-pattern" />
@@ -77,11 +87,11 @@ function BookModal({ book, onClose }) {
                   <div className="bp-cover-title">{book.title}</div>
                   <div className="bp-cover-author">{'— '}{book.author}</div>
                 </div>
-                <div className="bp-cover-hint">open {'→'}</div>
+                <div className="bp-cover-hint">{'open →'}</div>
               </div>
             </BookPage>
 
-            {/* Page 2: Summary */}
+            {/* Page 2 — Summary */}
             <BookPage className="bp-page">
               <div className="bp-page-inner">
                 <div className="bp-gutter-shadow" />
@@ -93,7 +103,7 @@ function BookModal({ book, onClose }) {
               </div>
             </BookPage>
 
-            {/* Page 3: My thoughts */}
+            {/* Page 3 — My thoughts */}
             <BookPage className="bp-page bp-page-right">
               <div className="bp-page-inner">
                 <div className="bp-label">{'// my_thoughts'}</div>
@@ -105,16 +115,18 @@ function BookModal({ book, onClose }) {
               </div>
             </BookPage>
 
-            {/* Page 4: Back cover */}
+            {/* Page 4 — Back cover */}
             <BookPage className="bp-cover bp-back-cover">
               <div className="bp-cover-inner" style={{ background: `linear-gradient(340deg, ${book.spine} 0%, ${book.accent}33 100%)` }}>
                 <div className="bp-cover-pattern" />
                 <div className="bp-back-body">
                   <div className="bp-meta-block">
-                    <div className="bp-meta-row">
-                      <span className="bp-meta-k">reading time</span>
-                      <span className="bp-meta-v">{book.readingTime}</span>
-                    </div>
+                    {book.readingTime && (
+                      <div className="bp-meta-row">
+                        <span className="bp-meta-k">reading time</span>
+                        <span className="bp-meta-v">{book.readingTime}</span>
+                      </div>
+                    )}
                     {book.dateRead && (
                       <div className="bp-meta-row">
                         <span className="bp-meta-k">date read</span>
@@ -148,105 +160,224 @@ function BookModal({ book, onClose }) {
   )
 }
 
-/* Book card — clicking opens the modal */
-function BookCard({ book, idx, onOpen }) {
-  const ref = useRef(null); const [vis, setVis] = useState(false)
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVis(true); obs.disconnect() } }, { threshold: 0.06 })
-    if (ref.current) obs.observe(ref.current); return () => obs.disconnect()
-  }, [])
-
-  const badgeClass = book.status === 'reading' ? 'badge-reading' : book.status === 'completed' ? 'badge-done' : 'badge-want'
-
+/* ── Portrait book card on the shelf ── */
+function ShelfBook({ book, idx, onOpen }) {
+  const [hovered, setHovered] = useState(false)
+  const badgeClass = book.status === 'reading' ? 'badge-reading'
+                   : book.status === 'completed' ? 'badge-done'
+                   : 'badge-want'
   return (
     <div
-      ref={ref}
-      className={`book-card${book.status === 'reading' ? ' reading-now' : ''} reveal${vis ? ' visible' : ''}`}
-      style={{ transitionDelay: `${(idx % 4) * 0.08}s` }}
+      className={`sb${hovered ? ' sb-hover' : ''}`}
+      style={{ transitionDelay: `${idx * 0.04}s` }}
       onClick={() => onOpen(book)}
-      role="button" tabIndex={0}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      role="button"
+      tabIndex={0}
       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onOpen(book) }}
       aria-label={`${book.title} by ${book.author}`}
     >
-      <div className="book-inner">
-        <div className="book-face">
-          <div className="book-cover">
-            <div className="book-cover-bg" style={{ background: `linear-gradient(135deg, ${book.spine} 0%, ${book.accent}55 100%)` }} />
-            <div className="book-cover-pattern" />
-            <span className={`book-status-badge ${badgeClass}`}>{STATUS_LABEL[book.status]}</span>
-            <div className="book-spine-title">{book.title}</div>
-            <div className="book-spine-author">{book.author}</div>
-          </div>
-          <div className="book-front-info">
-            <div className="book-front-genre">{book.genre}</div>
-            <div className="book-rating">
-              <Stars rating={book.rating} />
-              <span className="book-flip-hint">click to open</span>
-            </div>
-          </div>
+      <div className="sb-cover" style={{ background: `linear-gradient(160deg, ${book.spine} 0%, ${book.accent}66 100%)` }}>
+        <div className="sb-pattern" />
+        <span className={`sb-badge ${badgeClass}`}>{STATUS_LABEL[book.status]}</span>
+        <div className="sb-body">
+          <div className="sb-genre">{book.genre}</div>
+          <div className="sb-title">{book.title}</div>
+          <div className="sb-author">{book.author}</div>
+        </div>
+        <div className="sb-foot">
+          <Stars rating={book.rating} />
+          <span className="sb-hint">{'open →'}</span>
         </div>
       </div>
     </div>
   )
 }
 
+/* ── Big featured card for "Currently Reading" ── */
+function FeaturedBook({ book, onOpen }) {
+  const [ref, vis] = useReveal()
+  return (
+    <div
+      ref={ref}
+      className={`featured-book reveal${vis ? ' visible' : ''}`}
+      onClick={() => onOpen(book)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onOpen(book) }}
+      aria-label={`Currently reading: ${book.title}`}
+    >
+      <div className="featured-book-cover" style={{ background: `linear-gradient(160deg, ${book.spine} 0%, ${book.accent}55 100%)` }}>
+        <div className="sb-pattern" />
+        <div className="featured-cover-text">
+          <div className="featured-cover-genre">{book.genre}</div>
+          <div className="featured-cover-title">{book.title}</div>
+          <div className="featured-cover-author">{'— '}{book.author}</div>
+        </div>
+      </div>
+
+      <div className="featured-book-info">
+        <div className="featured-status-row">
+          <span className="reading-pulse" aria-hidden="true" />
+          <span className="featured-status-label">{'currently_reading'}</span>
+        </div>
+        <h3 className="featured-title">{book.title}</h3>
+        <p className="featured-author-line">{'by '}{book.author}</p>
+        {book.summary && <p className="featured-summary">{book.summary}</p>}
+        <div className="featured-meta-row">
+          {book.genre && <span className="tag">{book.genre}</span>}
+          {book.readingTime && <span className="featured-time">{book.readingTime}</span>}
+        </div>
+        <button
+          className="btn btn-outline"
+          style={{ marginTop: '1.5rem', fontSize: '0.78rem', alignSelf: 'flex-start' }}
+          onClick={e => { e.stopPropagation(); onOpen(book) }}
+        >
+          {'open book →'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ── A labelled shelf row ── */
+function BookShelf({ label, shelfBooks, onOpen }) {
+  const [ref, vis] = useReveal()
+  if (!shelfBooks.length) return null
+  return (
+    <div ref={ref} className={`bshelf reveal${vis ? ' visible' : ''}`}>
+      <div className="bshelf-header">
+        <span className="bshelf-comment">{'//'}</span>
+        <span className="bshelf-name">{label}</span>
+        <span className="bshelf-count">{'('}{shelfBooks.length}{')'}</span>
+        <div className="bshelf-line" />
+      </div>
+      <div className="bshelf-row">
+        {shelfBooks.map((book, i) => (
+          <ShelfBook key={book.id} book={book} idx={i} onOpen={onOpen} />
+        ))}
+      </div>
+      <div className="bshelf-plank">
+        <div className="bshelf-plank-shine" />
+      </div>
+    </div>
+  )
+}
+
+/* ── Page ── */
 export default function Reading() {
   const [filter, setFilter]     = useState('All')
   const [openBook, setOpenBook] = useState(null)
   const [hRef, hVis]            = useReveal()
 
-  const filtered = filter === 'All' ? books : books.filter(b => b.status === filter)
+  const readingBooks    = books.filter(b => b.status === 'reading')
+  const completedBooks  = books.filter(b => b.status === 'completed')
+  const wantToReadBooks = books.filter(b => b.status === 'want-to-read')
+  const filtered        = filter === 'All' ? books : books.filter(b => b.status === filter)
+
   const counts = {
-    total:     books.length,
-    completed: books.filter(b => b.status === 'completed').length,
-    reading:   books.filter(b => b.status === 'reading').length,
-    wantToRead:books.filter(b => b.status === 'want-to-read').length,
+    total:      books.length,
+    completed:  completedBooks.length,
+    reading:    readingBooks.length,
+    wantToRead: wantToReadBooks.length,
   }
+
+  const showAll      = filter === 'All'
+  const showReading  = filter === 'reading'
+  const showDone     = filter === 'completed'
+  const showWant     = filter === 'want-to-read'
 
   return (
     <div className="page" style={{ position: 'relative', zIndex: 1 }}>
       <div className="container">
+
+        {/* ── Header ── */}
         <div className="page-header">
           <div className="page-path">
             <span className="seg-home">~</span><span className="sep">/</span><span className="seg-cur">reading</span>
           </div>
           <div ref={hRef} className={`reveal${hVis ? ' visible' : ''}`}>
-            <h1 className="page-h1">Reading List</h1>
-            <p className="page-desc">Books I've read, am reading, and want to read. Click any card to open the book.</p>
+            <h1 className="page-h1">Library</h1>
+            <p className="page-desc">My personal bookshelf — books I've read, am reading, and want to explore. Click any book to open it.</p>
           </div>
         </div>
 
-        <div className={`reading-stats reveal${hVis ? ' visible' : ''} delay-1`} role="region">
-          <div className="read-stat"><span className="read-stat-val">{counts.total}</span><span className="read-stat-lbl">total books</span></div>
-          <div className="read-stat"><span className="read-stat-val">{counts.completed}</span><span className="read-stat-lbl">completed</span></div>
-          <div className="read-stat"><span className="read-stat-val">{counts.reading}</span><span className="read-stat-lbl">reading now</span></div>
-          <div className="read-stat"><span className="read-stat-val">{counts.wantToRead}</span><span className="read-stat-lbl">in queue</span></div>
+        {/* ── Stats ── */}
+        <div className={`reading-stats reveal${hVis ? ' visible' : ''} delay-1`} role="region" aria-label="Reading statistics">
+          <div className="read-stat">
+            <span className="read-stat-val">{counts.total}</span>
+            <span className="read-stat-lbl">total books</span>
+          </div>
+          <div className="read-stat">
+            <span className="read-stat-val" style={{ color: 'var(--green)' }}>{counts.completed}</span>
+            <span className="read-stat-lbl">completed</span>
+          </div>
+          <div className="read-stat">
+            <span className="read-stat-val" style={{ color: 'var(--syn-str)' }}>{counts.reading}</span>
+            <span className="read-stat-lbl">reading now</span>
+          </div>
+          <div className="read-stat">
+            <span className="read-stat-val">{counts.wantToRead}</span>
+            <span className="read-stat-lbl">in queue</span>
+          </div>
         </div>
 
-        <nav className={`filter-bar reveal${hVis ? ' visible' : ''} delay-2`} aria-label="Filter by status">
+        {/* ── Filter bar ── */}
+        <nav className={`filter-bar reveal${hVis ? ' visible' : ''} delay-2`} aria-label="Filter by reading status">
           {STATUS_FILTERS.map(s => (
-            <button key={s} className={`filter-pill${filter === s ? ' on' : ''}`}
-              onClick={() => setFilter(s)} aria-pressed={filter === s}>
-              {s === 'All' ? 'all' : STATUS_LABEL[s]}
+            <button
+              key={s}
+              className={`filter-pill${filter === s ? ' on' : ''}`}
+              onClick={() => setFilter(s)}
+              aria-pressed={filter === s}
+            >
+              {s === 'All' ? 'all books' : STATUS_LABEL[s]}
             </button>
           ))}
         </nav>
 
-        <div className="book-grid" role="feed">
-          {filtered.map((book, i) => <BookCard key={book.id} book={book} idx={i} onOpen={setOpenBook} />)}
-          {filtered.length === 0 && (
-            <p style={{ gridColumn: '1/-1', textAlign: 'center', color: 'var(--text-muted)', padding: '3rem', fontFamily: 'var(--font-code)' }}>
-              {'// No books in this category.'}
-            </p>
-          )}
-        </div>
+        {/* ── Currently Reading — featured ── */}
+        {(showAll || showReading) && readingBooks.length > 0 && (
+          <div style={{ marginBottom: '4rem' }}>
+            <div className="bshelf-header" style={{ marginBottom: '1.5rem' }}>
+              <span className="bshelf-comment">{'//'}</span>
+              <span className="bshelf-name" style={{ color: 'var(--syn-str)' }}>{'currently_reading'}</span>
+              <span className="bshelf-count">{'('}{readingBooks.length}{')'}</span>
+              <div className="bshelf-line" />
+            </div>
+            {readingBooks.map(book => (
+              <FeaturedBook key={book.id} book={book} onOpen={setOpenBook} />
+            ))}
+          </div>
+        )}
 
+        {/* ── Shelves ── */}
+        {(showAll || showDone)    && <BookShelf label="completed"    shelfBooks={completedBooks}  onOpen={setOpenBook} />}
+        {(showAll || showWant)    && <BookShelf label="want_to_read" shelfBooks={wantToReadBooks} onOpen={setOpenBook} />}
+        {showReading && readingBooks.length === 0 && (
+          <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '3rem', fontFamily: 'var(--font-code)', fontSize: '0.82rem' }}>
+            {'// Not currently reading anything.'}
+          </p>
+        )}
+
+        {/* ── Empty state ── */}
+        {filtered.length === 0 && !showReading && (
+          <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '3rem', fontFamily: 'var(--font-code)', fontSize: '0.82rem' }}>
+            {'// No books in this category yet.'}
+          </p>
+        )}
+
+        {/* ── Footer note ── */}
         <div style={{ marginTop: '4rem', padding: '1.5rem', border: '1px solid var(--dark-border)', borderRadius: 'var(--r-lg)', background: 'var(--dark-surface)', fontFamily: 'var(--font-code)', fontSize: '0.78rem' }}>
           <span style={{ color: 'var(--syn-comment)' }}>{'// More books being added as I read them.'}</span>
           <br />
           <span style={{ color: 'var(--syn-comment)' }}>{'// Got a recommendation? '}</span>
-          <a href="mailto:asoliyarohit@gmail.com?subject=Book Recommendation" style={{ color: 'var(--green)' }}>send it my way {'→'}</a>
+          <a href="mailto:asoliyarohit@gmail.com?subject=Book Recommendation" style={{ color: 'var(--green)' }}>
+            {'send it my way →'}
+          </a>
         </div>
+
       </div>
 
       {openBook && <BookModal book={openBook} onClose={() => setOpenBook(null)} />}
