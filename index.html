@@ -1,23 +1,444 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Rohit Singh Asoliya — Data Scientist & Python Developer. Building, learning, and shipping." />
-    <meta name="theme-color" content="#00ff41" />
-    <meta property="og:title" content="Rohit Singh Asoliya" />
-    <meta property="og:description" content="Data Scientist & Python Developer. Building, learning, and shipping." />
-    <title>Rohit Singh Asoliya</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rohit Singh Asoliya</title>
+  <meta name="description" content="Rohit Singh Asoliya — Staff Data Analyst. Building, learning, and shipping." />
+  <meta name="theme-color" content="#00ff41" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">RSA<span class="blink">_</span></a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#learning">Learning</a></li>
+    <li><a href="#books">Books</a></li>
+    <li><a href="#contributions">Contributions</a></li>
+    <li><a href="mailto:asoliyarohit@gmail.com" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero-inner">
+    <div class="term-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="term-title">rohit@portfolio ~ %</span></div>
+    <div class="hero-body">
+      <p class="hero-comment">// Staff Data Analyst &amp; Curious Learner</p>
+      <h1 class="hero-name">Rohit Singh<br/><span class="green">Asoliya</span></h1>
+      <div class="typewriter-wrap">
+        <span class="tw-prefix">&gt; </span><span id="typewriter"></span><span class="cursor">|</span>
+      </div>
+      <p class="hero-bio">On a joyful autopilot with curiosity. Turning raw numbers into insight, one commit at a time.</p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="https://github.com/asoliyarohit" target="_blank" rel="noopener" class="btn-outline">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <h2 class="section-title"><span class="cyan">02.</span> About</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Hi — I'm Rohit. I navigate the world of data with enthusiasm and a learner's spirit. Whether it's wrangling datasets, building ETL pipelines, or diving into statistics, I find joy in turning raw numbers into insight.</p>
+        <p>Currently on a 100-day challenge — pushing myself academically, physically, and creatively. Every day is a new commit in the story of becoming better.</p>
+        <div class="links-row">
+          <a href="https://github.com/asoliyarohit" target="_blank" rel="noopener" class="link-badge">GitHub</a>
+          <a href="https://www.linkedin.com/in/asoliyarohit" target="_blank" rel="noopener" class="link-badge">LinkedIn</a>
+          <a href="https://twitter.com/asoliyarohit" target="_blank" rel="noopener" class="link-badge">Twitter</a>
+          <a href="mailto:asoliyarohit@gmail.com" class="link-badge">Email</a>
+        </div>
+      </div>
+      <div class="skills-col">
+        <h3 class="skills-heading">// Skills</h3>
+        <div class="skill-list">
+          <div class="skill-item"><span class="skill-name">SQL</span><div class="skill-bar"><div class="skill-fill" data-level="68"></div></div><span class="skill-pct">68%</span></div>
+          <div class="skill-item"><span class="skill-name">Data Viz</span><div class="skill-bar"><div class="skill-fill" data-level="65"></div></div><span class="skill-pct">65%</span></div>
+          <div class="skill-item"><span class="skill-name">Statistics</span><div class="skill-bar"><div class="skill-fill" data-level="62"></div></div><span class="skill-pct">62%</span></div>
+          <div class="skill-item"><span class="skill-name">ETL Pipelines</span><div class="skill-bar"><div class="skill-fill" data-level="60"></div></div><span class="skill-pct">60%</span></div>
+          <div class="skill-item"><span class="skill-name">Git &amp; GitHub</span><div class="skill-bar"><div class="skill-fill" data-level="60"></div></div><span class="skill-pct">60%</span></div>
+          <div class="skill-item"><span class="skill-name">PySpark</span><div class="skill-bar"><div class="skill-fill" data-level="58"></div></div><span class="skill-pct">58%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num" data-target="4">0</div><div class="stat-label">Projects</div></div>
+      <div class="stat-card"><div class="stat-num" data-target="5">0</div><div class="stat-label">Learnings</div></div>
+      <div class="stat-card"><div class="stat-num" data-target="3">0</div><div class="stat-label">Books Read</div></div>
+      <div class="stat-card"><div class="stat-num" data-target="100">0</div><div class="stat-label">Day Challenge</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <h2 class="section-title"><span class="cyan">03.</span> Projects</h2>
+    <div class="cards-grid">
+
+      <div class="project-card reveal">
+        <div class="card-header">
+          <span class="tag">Data Analysis</span>
+          <span class="status done">done</span>
+        </div>
+        <h3>US President Heights Analysis</h3>
+        <p>An ETL project analyzing heights of all US Presidents. Extracted from CSV, transformed with Pandas, and computed descriptive statistics.</p>
+        <ul class="highlights">
+          <li>ETL pipeline: Extract → Transform → Load</li>
+          <li>Computed mean, median, min, max height</li>
+          <li>Visualized distribution with Matplotlib</li>
+        </ul>
+        <div class="tech-pills">
+          <span>Python</span><span>Pandas</span><span>NumPy</span><span>Matplotlib</span>
+        </div>
+        <a href="https://github.com/asoliyarohit" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="card-header">
+          <span class="tag">Learning Project</span>
+          <span class="status done">done</span>
+        </div>
+        <h3>IDS Book: Chapter 2 Practice</h3>
+        <p>Hands-on practice — built real DataFrames, applied groupby, pivot tables, and lambda transforms.</p>
+        <ul class="highlights">
+          <li>Built DataFrames from scratch</li>
+          <li>Mastered groupby and agg functions</li>
+          <li>Applied pivot tables for summary analysis</li>
+        </ul>
+        <div class="tech-pills">
+          <span>Python</span><span>Pandas</span><span>ETL</span>
+        </div>
+        <a href="https://github.com/asoliyarohit" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="card-header">
+          <span class="tag">Learning Project</span>
+          <span class="status done">done</span>
+        </div>
+        <h3>IDS Book: Chapter 3 Practice</h3>
+        <p>Applied descriptive statistics — data cleaning, histograms, CDFs, and PMFs.</p>
+        <ul class="highlights">
+          <li>Descriptive stats with Pandas describe()</li>
+          <li>Plotted histograms and frequency tables</li>
+          <li>Computed CDF/PMF for distributions</li>
+        </ul>
+        <div class="tech-pills">
+          <span>Python</span><span>Statistics</span><span>Matplotlib</span>
+        </div>
+        <a href="https://github.com/asoliyarohit" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="card-header">
+          <span class="tag">Practice</span>
+          <span class="status wip">in progress</span>
+        </div>
+        <h3>Python Workbook: 100 Exercises</h3>
+        <p>Working through a curated Python workbook — from string manipulation to functions and file I/O.</p>
+        <ul class="highlights">
+          <li>String formatting and manipulation</li>
+          <li>List comprehensions and iteration</li>
+          <li>Function definitions and scope</li>
+        </ul>
+        <div class="tech-pills">
+          <span>Python</span><span>Problem Solving</span>
+        </div>
+        <a href="https://github.com/asoliyarohit" target="_blank" rel="noopener" class="card-link">View on GitHub →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- LEARNING -->
+<section id="learning">
+  <div class="container">
+    <h2 class="section-title"><span class="cyan">04.</span> Learning</h2>
+    <div class="learning-list">
+
+      <details class="learning-card reveal">
+        <summary>
+          <div class="learn-summary-inner">
+            <div><span class="learn-tag">Data Science</span><h3>IDS Book — Ch.2: Toolboxes for Data Science</h3><p>Explored key Python toolboxes — mastered DataFrame operations, filtering, groupby, pivot tables, and lambda functions.</p></div>
+            <span class="learn-date">Aug 15, 2024</span>
+          </div>
+        </summary>
+        <ul class="learn-highlights">
+          <li>DataFrame creation and manipulation with Pandas</li>
+          <li>Data filtering using boolean indexing</li>
+          <li>GroupBy aggregations and pivot tables</li>
+          <li>Lambda functions for data transformation</li>
+          <li>Merging and joining datasets</li>
+        </ul>
+      </details>
+
+      <details class="learning-card reveal">
+        <summary>
+          <div class="learn-summary-inner">
+            <div><span class="learn-tag">Statistics</span><h3>IDS Book — Ch.3: Descriptive Statistics</h3><p>Deep dive into descriptive statistics — mean, median, variance, CDFs, PMFs, and exploratory data analysis.</p></div>
+            <span class="learn-date">Aug 20, 2024</span>
+          </div>
+        </summary>
+        <ul class="learn-highlights">
+          <li>Measures of central tendency (mean, median, mode)</li>
+          <li>Spread — variance, standard deviation, IQR</li>
+          <li>Histograms and frequency distributions</li>
+          <li>CDF and PMF for probability analysis</li>
+          <li>Data cleaning for outlier handling</li>
+        </ul>
+      </details>
+
+      <details class="learning-card reveal">
+        <summary>
+          <div class="learn-summary-inner">
+            <div><span class="learn-tag">Python</span><h3>Python Workbook — Exercise 1</h3><p>First Python workbook exercise — printing formatted mailing addresses using string operations.</p></div>
+            <span class="learn-date">Jul 1, 2024</span>
+          </div>
+        </summary>
+        <ul class="learn-highlights">
+          <li>String formatting in Python</li>
+          <li>Print function with multiple arguments</li>
+          <li>Variable assignment and data types</li>
+        </ul>
+      </details>
+
+      <details class="learning-card reveal">
+        <summary>
+          <div class="learn-summary-inner">
+            <div><span class="learn-tag">Growth</span><h3>100-Day Challenge: Day 0 — Ignition</h3><p>Kickstarted a 100-day personal challenge covering academics, health, and creativity.</p></div>
+            <span class="learn-date">Sep 22, 2024</span>
+          </div>
+        </summary>
+        <ul class="learn-highlights">
+          <li>Set clear academic goals for 100 days</li>
+          <li>Established daily exercise routine</li>
+          <li>Committed to daily learning entries</li>
+        </ul>
+      </details>
+
+      <details class="learning-card reveal">
+        <summary>
+          <div class="learn-summary-inner">
+            <div><span class="learn-tag">Tools</span><h3>Git &amp; GitHub Fundamentals</h3><p>Learned version control fundamentals — branching, committing, pull requests, and collaborative workflows.</p></div>
+            <span class="learn-date">Jun 15, 2024</span>
+          </div>
+        </summary>
+        <ul class="learn-highlights">
+          <li>Core git commands (init, add, commit, push, pull)</li>
+          <li>Branching and merging strategies</li>
+          <li>Pull request workflow</li>
+          <li>Resolving merge conflicts</li>
+        </ul>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- BOOKS -->
+<section id="books">
+  <div class="container">
+    <h2 class="section-title"><span class="cyan">05.</span> Reading</h2>
+    <div class="books-grid">
+
+      <div class="book-card reveal" style="--spine:#1a365d;--accent:#63b3ed">
+        <div class="book-spine"></div>
+        <div class="book-info">
+          <div class="book-top">
+            <span class="book-status completed">completed</span>
+            <span class="book-rating">★★★★★ 5/5</span>
+          </div>
+          <h3>Python Data Science Handbook</h3>
+          <p class="book-author">Jake VanderPlas</p>
+          <p class="book-summary">The definitive guide to the Python data science stack — NumPy, Pandas, Matplotlib, Scikit-Learn, and IPython covered comprehensively.</p>
+          <p class="book-thoughts">"Best technical reference I've found. Dense but worth every page."</p>
+          <div class="book-meta"><span>Data Science</span><span>~20 hrs</span><span>Aug 2024</span></div>
+          <a href="https://www.amazon.com/Python-Data-Science-Handbook-Essential/dp/1491912057" target="_blank" rel="noopener" class="book-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+      <div class="book-card reveal" style="--spine:#1a472a;--accent:#68d391">
+        <div class="book-spine"></div>
+        <div class="book-info">
+          <div class="book-top">
+            <span class="book-status completed">completed</span>
+            <span class="book-rating">★★★★½ 4.5/5</span>
+          </div>
+          <h3>Think Python</h3>
+          <p class="book-author">Allen B. Downey</p>
+          <p class="book-summary">An introduction to Python with a computer science mindset. Takes a problem-solving approach to teach programming concepts incrementally.</p>
+          <p class="book-thoughts">"Perfect for beginners. The exercises are well-crafted and explanations are crisp."</p>
+          <div class="book-meta"><span>Python</span><span>~14 hrs</span><span>May 2024</span></div>
+          <a href="https://www.amazon.com/Think-Python-Like-Computer-Scientist/dp/1491939362" target="_blank" rel="noopener" class="book-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+      <div class="book-card reveal" style="--spine:#2d1b69;--accent:#9f7aea">
+        <div class="book-spine"></div>
+        <div class="book-info">
+          <div class="book-top">
+            <span class="book-status reading">reading</span>
+            <span class="book-rating">★★★★ 4/5</span>
+          </div>
+          <h3>Intro to Data Science</h3>
+          <p class="book-author">Joel Grus</p>
+          <p class="book-summary">Introduction to data science covering the full pipeline — collection, cleaning, analysis, visualization, and intro to machine learning.</p>
+          <p class="book-thoughts">"Currently working through it. Chapters 2 and 3 are excellent."</p>
+          <div class="book-meta"><span>Data Science</span><span>In progress</span></div>
+        </div>
+      </div>
+
+      <div class="book-card reveal" style="--spine:#3d1a00;--accent:#f6ad55">
+        <div class="book-spine"></div>
+        <div class="book-info">
+          <div class="book-top">
+            <span class="book-status completed">completed</span>
+            <span class="book-rating">★★★★★ 5/5</span>
+          </div>
+          <h3>Atomic Habits</h3>
+          <p class="book-author">James Clear</p>
+          <p class="book-summary">A practical guide to building good habits and breaking bad ones using small 1% improvements compounded over time.</p>
+          <p class="book-thoughts">"Changed how I think about systems vs goals. Identity-based habits are the key insight."</p>
+          <div class="book-meta"><span>Growth</span><span>~8 hrs</span><span>Mar 2024</span></div>
+          <a href="https://www.amazon.com/Atomic-Habits-Proven-Build-Break/dp/0735211299" target="_blank" rel="noopener" class="book-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+      <div class="book-card reveal" style="--spine:#0f172a;--accent:#00d4ff">
+        <div class="book-spine"></div>
+        <div class="book-info">
+          <div class="book-top">
+            <span class="book-status want">want to read</span>
+          </div>
+          <h3>The Pragmatic Programmer</h3>
+          <p class="book-author">Hunt &amp; Thomas</p>
+          <p class="book-summary">Classic software engineering book covering practical approaches — code quality, automation, and career advice for developers.</p>
+          <p class="book-thoughts">"On my reading list. DRY and orthogonality principles alone make it worth reading."</p>
+          <div class="book-meta"><span>Engineering</span><span>~16 hrs</span></div>
+          <a href="https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary/dp/0135957052" target="_blank" rel="noopener" class="book-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+      <div class="book-card reveal" style="--spine:#1a3a1a;--accent:#48bb78">
+        <div class="book-spine"></div>
+        <div class="book-info">
+          <div class="book-top">
+            <span class="book-status want">want to read</span>
+          </div>
+          <h3>Statistics in Plain English</h3>
+          <p class="book-author">Timothy Urdan</p>
+          <p class="book-summary">Statistics explained without heavy mathematical notation — a solid bridge between intuition and formal statistical reasoning.</p>
+          <p class="book-thoughts">"Queued up next. Need to solidify the stats foundation before going deeper into ML."</p>
+          <div class="book-meta"><span>Statistics</span><span>~10 hrs</span></div>
+          <a href="https://www.amazon.com/Statistics-Plain-English-Timothy-Urdan/dp/1138838349" target="_blank" rel="noopener" class="book-link">Buy on Amazon →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTRIBUTIONS -->
+<section id="contributions">
+  <div class="container">
+    <h2 class="section-title"><span class="cyan">06.</span> Contributions</h2>
+    <div class="contrib-grid">
+      <div class="contrib-col">
+        <h3 class="contrib-heading">// Open Source</h3>
+        <div class="timeline">
+
+          <div class="tl-item reveal">
+            <div class="tl-dot active"></div>
+            <div class="tl-content">
+              <div class="tl-header"><span class="tl-title">Personal Portfolio Website</span><span class="tl-status active-badge">active</span></div>
+              <p class="tl-org">asoliyarohit.github.io</p>
+              <p>Built and maintain this open personal website — documenting learnings, projects, and the journey from beginner to practitioner.</p>
+              <span class="tl-date">2024 – Present</span>
+            </div>
+          </div>
+
+          <div class="tl-item reveal">
+            <div class="tl-dot planned"></div>
+            <div class="tl-content">
+              <div class="tl-header"><span class="tl-title">Scouting Data Science Repos</span><span class="tl-status planned-badge">planned</span></div>
+              <p class="tl-org">GitHub</p>
+              <p>Exploring open source data science projects — Pandas, NumPy, beginner-friendly repos tagged "good first issue".</p>
+              <span class="tl-date">Q4 2024</span>
+            </div>
+          </div>
+
+          <div class="tl-item reveal">
+            <div class="tl-dot planned"></div>
+            <div class="tl-content">
+              <div class="tl-header"><span class="tl-title">Documentation Contribution</span><span class="tl-status planned-badge">planned</span></div>
+              <p class="tl-org">Open Source</p>
+              <p>Planning to improve documentation for a Python data science library — README clarity, adding examples, fixing outdated content.</p>
+              <span class="tl-date">2025</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="contrib-col">
+        <h3 class="contrib-heading">// Available For</h3>
+        <div class="consult-cards">
+
+          <div class="consult-card reveal">
+            <h4>Data Analysis Consulting</h4>
+            <p>Available for small data analysis projects — EDA, cleaning messy datasets, generating insights from structured data.</p>
+            <div class="tech-pills"><span>Python</span><span>Pandas</span><span>EDA</span><span>Visualization</span></div>
+          </div>
+
+          <div class="consult-card reveal">
+            <h4>Python Scripting &amp; Automation</h4>
+            <p>Can help automate repetitive data tasks, build simple ETL pipelines, or write Python scripts to process and transform data files.</p>
+            <div class="tech-pills"><span>Python</span><span>ETL</span><span>Automation</span></div>
+          </div>
+
+          <div class="consult-card reveal">
+            <h4>Learning Mentorship</h4>
+            <p>Happy to guide beginners on Python and data science — explaining concepts, reviewing code, or suggesting learning paths.</p>
+            <div class="tech-pills"><span>Teaching</span><span>Python</span><span>Data Science</span></div>
+          </div>
+
+        </div>
+        <a href="mailto:asoliyarohit@gmail.com" class="btn-primary" style="margin-top:1.5rem;display:inline-block">Get in Touch →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-code"><span class="cyan">const</span> <span class="green">rohit</span> = { building: <span class="cyan">true</span>, learning: <span class="cyan">true</span> };</span>
+    <div class="footer-links">
+      <a href="https://github.com/asoliyarohit" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/asoliyarohit" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://twitter.com/asoliyarohit" target="_blank" rel="noopener">Twitter</a>
+      <a href="mailto:asoliyarohit@gmail.com">Email</a>
+    </div>
+    <p class="footer-copy">Built by Rohit Singh Asoliya &mdash; 2024</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
 </html>
