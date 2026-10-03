@@ -117,7 +117,7 @@ const loadJS = src => new Promise((res, rej) => {
   if (document.querySelector(`script[data-lazy="${src}"]`)) return res();
   const t = document.createElement('script'); t.src = src; t.dataset.lazy = src; t.onload = res; t.onerror = rej; document.head.append(t);
 });
-async function ensureTerminal() { if (window.toggleTerminal) return; if (!window.createMascot) await loadJS('mascot.js?v=20261015'); await loadJS('cli.js?v=20261015'); }
+async function ensureTerminal() { if (window.toggleTerminal) return; if (!window.createMascot) await loadJS('mascot.js?v=20261016'); await loadJS('cli.js?v=20261016'); }
 {
   const k = document.getElementById('kA'); if (k && !/Mac|iPhone|iPad/.test(navigator.platform)) k.textContent = 'Ctrl';
   document.getElementById('navJump').addEventListener('click', async () => { await ensureTerminal(); window.toggleTerminal(); });
@@ -194,7 +194,7 @@ function renderContributions(c) {
 }
 
 /* ── Routing ──────────────────────────────────────────────── */
-const getJSON = f => fetch('content/' + f + '?v=20261015').then(r => r.json());
+const getJSON = f => fetch('content/' + f + '?v=20261016').then(r => r.json());
 
 (async function () {
   switch (PAGE) {

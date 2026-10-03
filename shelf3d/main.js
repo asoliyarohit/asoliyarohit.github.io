@@ -3,9 +3,9 @@
    a little robot tidies it, the camera moves in, and you read it by
    clicking its pages. */
 import * as THREE from '../vendor/three.bundle.js';
-import { buildRoom, LAYOUT } from './room.js?v=20261015';
-import { Drone, Robot } from './characters.js?v=20261015';
-import { Book3D, DIM } from './book.js?v=20261015';
+import { buildRoom, LAYOUT } from './room.js?v=20261016';
+import { Drone, Robot } from './characters.js?v=20261016';
+import { Book3D, DIM } from './book.js?v=20261016';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const Q = () => new THREE.Quaternion();

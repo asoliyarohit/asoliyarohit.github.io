@@ -3,12 +3,12 @@
    that knows about the whole site. The pixel chipmunk lives on top of it. */
 (function () {
   const DATA = {};
-  const load = async name => DATA[name] || (DATA[name] = await fetch('content/' + name + '.json?v=20261015').then(r => r.json()));
+  const load = async name => DATA[name] || (DATA[name] = await fetch('content/' + name + '.json?v=20261016').then(r => r.json()));
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const pad = (s, n) => String(s).padEnd(n, ' ');
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const THEMES = { ice: ['#cfe3ff', '#7f93b3', '#0e1624', '#ffffff'], mono: ['#e9e9e9', '#8a8a8a', '#101010', '#ffffff'], paper: ['#1d232c', '#6a7280', '#f2f0ea', '#000000'], violet: ['#e2dcff', '#8f86bf', '#14122a', '#ffffff'] };
+  const THEMES = { matrix: ['#3dff7a', '#1fa352', '#020a05', '#d8ffe6'], mono: ['#e9e9e9', '#8a8a8a', '#101010', '#ffffff'], paper: ['#1d232c', '#6a7280', '#f2f0ea', '#000000'] };
   const PAGES = { home: 'index.html', work: 'projects.html', projects: 'projects.html', journal: 'journal.html', learning: 'learning.html', shelf: 'books.html', books: 'books.html', 'open-source': 'contributions.html', contributions: 'contributions.html', contact: 'mailto:asoliyarohit@gmail.com' };
   PAGES.journal = 'learning.html';
 
@@ -43,7 +43,7 @@
             <div class="t-out" aria-live="polite"></div>
             <label class="t-line"><span class="t-ps1">rohit@portfolio:~$</span><input class="t-in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a command" /></label>
             <div class="t-chips"><button type="button">help</button><button type="button">about</button><button type="button">projects</button><button type="button">skills</button><button type="button">shelf</button><button type="button">contact</button></div>
-            <div class="t-status"><span>LATENCY <em data-v="lat2">25</em>ms</span><span>KEYS <em data-v="keys2">0</em></span><span>THEME <em data-v="theme">ice</em></span></div>
+            <div class="t-status"><span>LATENCY <em data-v="lat2">25</em>ms</span><span>KEYS <em data-v="keys2">0</em></span><span>THEME <em data-v="theme">matrix</em></span></div>
           </div>
           <div class="t-crt" aria-hidden="true"></div>
         </div>
@@ -51,7 +51,7 @@
     const q = s => host.querySelector(s), qa = s => [...host.querySelectorAll(s)];
     const win = q('.t-win'), bubble = q('.t-bubble'), out = q('.t-out'), input = q('.t-in'), idle = q('.t-idle'), shell = q('.t-shell');
     const mascot = createMascot(q('.t-chip'));
-    const ctl = { state: 'asleep', keys: 0, lat: 25, history: [], hi: -1, theme: 'ice', tipTimer: 0, visible: true, booted: false };
+    const ctl = { state: 'asleep', keys: 0, lat: 25, history: [], hi: -1, theme: 'matrix', tipTimer: 0, visible: true, booted: false };
     const setState = s => { ctl.state = s; host.dataset.state = s; };
 
     /* ── speech bubble ─────────────────────────────────── */
@@ -66,7 +66,7 @@
     const dpr = Math.min(devicePixelRatio || 1, 2), ch = {};
     qa('canvas[data-c]').forEach(c => { ch[c.dataset.c] = { c, ctx: c.getContext('2d'), v: Array.from({ length: 28 }, (_, i) => Math.exp(-i / 7) * (.7 + Math.random() * .3)), w: 0, h: 0 }; });
     const walk = [Array.from({ length: 48 }, () => .3 + Math.random() * .2), Array.from({ length: 48 }, () => .2 + Math.random() * .1)];
-    const css = () => getComputedStyle(host).getPropertyValue('--t-fg').trim() || '#cfe3ff';
+    const css = () => getComputedStyle(host).getPropertyValue('--t-fg').trim() || '#3dff7a';
     const hi = () => getComputedStyle(host).getPropertyValue('--t-hi').trim() || '#fff';
     const fitC = o => { const r = o.c.getBoundingClientRect(); if (!r.width) return false; const w = Math.round(r.width * dpr), h = Math.round(r.height * dpr); if (o.w !== w || o.h !== h) { o.c.width = w; o.c.height = h; o.w = w; o.h = h; } return true; };
     function drawBars(o, tick) {
@@ -177,7 +177,7 @@
       q('.t-bar').addEventListener('pointerup', end); q('.t-bar').addEventListener('pointercancel', end);
     }
 
-    setTheme('ice'); setState('asleep'); welcome();
+    setTheme('matrix'); setState('asleep'); welcome();
     return {
       boot, nap, wake, say, mascot, el: host, focus: () => input.focus({ preventScroll: true }),
       destroy() { cancelAnimationFrame(raf); clearInterval(ctl.tipTimer); removeEventListener('keydown', onKey); io.disconnect(); mascot.destroy(); },
