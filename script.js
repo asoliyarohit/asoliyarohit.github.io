@@ -26,6 +26,7 @@ const pad2 = n => String(n).padStart(2, '0');
       <li><a href="learning.html">Journal</a></li>
       <li><a href="books.html">Shelf</a></li>
       <li><a href="contributions.html">Open Source</a></li>
+      <li><button class="nav-jump" id="navJump" type="button" aria-label="Open the terminal"><span class="t-ico">&gt;_</span><span>Terminal</span><kbd id="kA">&#8984;</kbd><kbd>K</kbd></button></li>
       <li><a href="mailto:${EMAIL}" class="nav-cta">Say hello</a></li>
     </ul>
   </nav>`;
@@ -107,96 +108,20 @@ const pad2 = n => String(n).padStart(2, '0');
       setTimeout(() => { location.href = a.href; }, 520);
     });
     addEventListener('pageshow', e => { if (e.persisted) wipe.classList.remove('leaving'); });
+    window.__go = href => { wipe.classList.add('leaving'); setTimeout(() => { location.href = href; }, 520); };
   }
 })();
 
-/* ── Hero: orbiting particle field ("singularity") ────────── */
-function initField() {
-  const canvas = document.getElementById('field');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let w, h, dpr, cx, cy, parts = [], visible = true;
-  const mouse = { x: -999, y: -999 };
-
-  function setup() {
-    dpr = Math.min(devicePixelRatio || 1, 2);
-    const r = canvas.getBoundingClientRect();
-    w = r.width; h = r.height;
-    canvas.width = w * dpr; canvas.height = h * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const wide = w > 820;
-    cx = wide ? w * .8 : w * .5;
-    cy = wide ? h * .43 : h * .26;
-    const R = Math.min(w, h) * (wide ? .55 : .5);
-    const n = Math.round(Math.min(1100, (w * h) / 1500));
-    parts = Array.from({ length: n }, () => {
-      const t = Math.random();
-      return {
-        r: 28 + Math.pow(t, 1.6) * R,
-        a: Math.random() * Math.PI * 2,
-        s: .0009 + Math.random() * .0006,
-        ox: 0, oy: 0,
-        size: Math.random() * 1.3 + .4,
-        hot: Math.random() < .07,
-      };
-    });
-  }
-
-  function frame() {
-    if (visible) {
-      ctx.clearRect(0, 0, w, h);
-      /* core glow */
-      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 120);
-      g.addColorStop(0, 'rgba(255,91,46,.28)'); g.addColorStop(1, 'rgba(255,91,46,0)');
-      ctx.fillStyle = g; ctx.fillRect(cx - 130, cy - 130, 260, 260);
-
-      for (const p of parts) {
-        p.a += p.s * (260 / p.r) * (REDUCED ? 0 : 1);
-        let x = cx + Math.cos(p.a) * p.r;
-        let y = cy + Math.sin(p.a) * p.r * .5;
-        /* tilt the disc */
-        const tilt = -.32, xr = x - cx, yr = y - cy;
-        x = cx + xr * Math.cos(tilt) - yr * Math.sin(tilt);
-        y = cy + xr * Math.sin(tilt) + yr * Math.cos(tilt);
-
-        const dx = x + p.ox - mouse.x, dy = y + p.oy - mouse.y, d2 = dx * dx + dy * dy;
-        if (d2 < 14000) { const f = (1 - d2 / 14000) * 3; const d = Math.sqrt(d2) || 1; p.ox += dx / d * f; p.oy += dy / d * f; }
-        p.ox *= .93; p.oy *= .93;
-
-        ctx.fillStyle = p.hot ? 'rgba(255,91,46,.95)' : 'rgba(236,233,226,' + (.18 + (1 - p.r / (w * .6)) * .45).toFixed(2) + ')';
-        ctx.fillRect(x + p.ox, y + p.oy, p.size, p.size);
-      }
-      /* event horizon */
-      ctx.beginPath(); ctx.arc(cx, cy, 24, 0, 7);
-      ctx.fillStyle = '#0a0a0b'; ctx.fill();
-      ctx.strokeStyle = 'rgba(255,91,46,.8)'; ctx.lineWidth = 1; ctx.stroke();
-    }
-    if (!REDUCED) requestAnimationFrame(frame);
-  }
-
-  setup();
-  frame();
-  addEventListener('resize', setup);
-  addEventListener('pointermove', e => {
-    const r = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
-  });
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(canvas);
-}
-
-/* ── Hero role swapper ────────────────────────────────────── */
-function initSwap(roles) {
-  const el = document.getElementById('swap');
-  if (!el || REDUCED) return;
-  let i = 0;
-  setInterval(() => {
-    el.style.transition = 'opacity .35s, transform .35s';
-    el.style.opacity = 0; el.style.transform = 'translateY(8px)';
-    setTimeout(() => {
-      i = (i + 1) % roles.length; el.textContent = roles[i];
-      el.style.opacity = 1; el.style.transform = 'none';
-    }, 350);
-  }, 2600);
+/* ── Terminal on every page (Ctrl/⌘+K), loaded on demand ───── */
+const loadJS = src => new Promise((res, rej) => {
+  if (document.querySelector(`script[data-lazy="${src}"]`)) return res();
+  const t = document.createElement('script'); t.src = src; t.dataset.lazy = src; t.onload = res; t.onerror = rej; document.head.append(t);
+});
+async function ensureTerminal() { if (window.toggleTerminal) return; if (!window.createMascot) await loadJS('mascot.js?v=20261011'); await loadJS('cli.js?v=20261011'); }
+{
+  const k = document.getElementById('kA'); if (k && !/Mac|iPhone|iPad/.test(navigator.platform)) k.textContent = 'Ctrl';
+  document.getElementById('navJump').addEventListener('click', async () => { await ensureTerminal(); window.toggleTerminal(); });
+  addEventListener('keydown', async e => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); await ensureTerminal(); window.toggleTerminal(); } });
 }
 
 /* ── Observers ────────────────────────────────────────────── */
@@ -210,81 +135,7 @@ function initScrollReveal() {
   });
 }
 
-function initSkillBars() {
-  const col = document.querySelector('.skill-list');
-  if (!col) return;
-  new IntersectionObserver((es, io) => es.forEach(e => {
-    if (!e.isIntersecting) return;
-    e.target.querySelectorAll('.skill-fill').forEach(b => { b.style.width = b.dataset.level + '%'; });
-    io.unobserve(e.target);
-  }), { threshold: .3 }).observe(col);
-}
-
-function initStatsCounter() {
-  const row = document.querySelector('.stats-row');
-  if (!row) return;
-  new IntersectionObserver((es, io) => es.forEach(e => {
-    if (!e.isIntersecting) return;
-    e.target.querySelectorAll('.stat-num').forEach(el => {
-      const target = +el.dataset.target, t0 = performance.now(), dur = 1400;
-      (function step(t) {
-        const k = Math.min((t - t0) / dur, 1), eased = 1 - Math.pow(1 - k, 4);
-        el.textContent = Math.round(target * eased);
-        if (k < 1) requestAnimationFrame(step);
-      })(t0);
-    });
-    io.unobserve(e.target);
-  }), { threshold: .5 }).observe(row);
-}
-
-/* words light up as the statement scrolls through the viewport */
-function initStatement() {
-  const el = document.querySelector('.statement');
-  if (!el) return;
-  const words = el.textContent.trim().split(/\s+/);
-  el.innerHTML = words.map(w => `<span class="w">${esc(w)}</span>`).join(' ');
-  const spans = el.querySelectorAll('.w');
-  const update = () => {
-    const r = el.getBoundingClientRect();
-    const p = Math.min(Math.max((innerHeight * .85 - r.top) / (r.height + innerHeight * .3), 0), 1);
-    const lit = Math.round(p * spans.length);
-    spans.forEach((s, i) => s.classList.toggle('lit', REDUCED || i < lit));
-  };
-  addEventListener('scroll', update, { passive: true });
-  update();
-}
-
 /* ── Renderers ────────────────────────────────────────────── */
-function renderHome(about, skills, projects) {
-  document.querySelector('.hero-bio').textContent = about.hero.bio;
-  document.getElementById('swap').textContent = about.hero.roles[1] || about.hero.roles[0];
-
-  document.querySelector('.marquee-track').innerHTML =
-    [...skills.map(s => s.name), 'Python', 'Pandas', 'Matplotlib', 'Statistics']
-      .map(t => `<span>${esc(t)}</span><span>&#10038;</span>`).join('').repeat(2);
-
-  document.querySelector('.statement').textContent = about.paragraphs[0];
-  document.querySelector('.about-text').innerHTML =
-    `<p>${esc(about.paragraphs[1])}</p>` +
-    `<div class="links-row">${about.links.map(l =>
-      `<a href="${esc(l.href)}"${l.external ? ' target="_blank" rel="noopener"' : ''} class="link-badge">${esc(l.label)}</a>`).join('')}</div>`;
-
-  document.querySelector('.skill-list').innerHTML = skills.map(s => `
-    <div class="skill-item">
-      <span class="skill-name">${esc(s.name)}</span>
-      <div class="skill-bar"><div class="skill-fill" data-level="${s.level}"></div></div>
-      <span class="skill-pct">${s.level}%</span>
-    </div>`).join('');
-
-  document.querySelector('.stats-row').innerHTML = about.stats.map(s => `
-    <div class="stat-card">
-      <div class="stat-num" data-target="${s.target}">0</div>
-      <div class="stat-label">${esc(s.label)}</div>
-    </div>`).join('');
-
-  renderProjects(projects.slice(0, 3));
-}
-
 function renderProjects(projects) {
   const list = document.querySelector('.work-list');
   if (!list) return;
@@ -343,17 +194,11 @@ function renderContributions(c) {
 }
 
 /* ── Routing ──────────────────────────────────────────────── */
-const getJSON = f => fetch('content/' + f + '?v=20261010').then(r => r.json());
+const getJSON = f => fetch('content/' + f + '?v=20261011').then(r => r.json());
 
 (async function () {
   switch (PAGE) {
-    case 'home': {
-      const [about, skills, projects] = await Promise.all([getJSON('about.json'), getJSON('skills.json'), getJSON('projects.json')]);
-      renderHome(about, skills, projects);
-      initField(); initSwap(about.hero.roles.slice(1));
-      initStatement(); initSkillBars(); initStatsCounter();
-      break;
-    }
+    case 'home':          break;   /* home.js tells its own story */
     case 'projects':      renderProjects(await getJSON('projects.json')); break;
     case 'learning':      renderLearnings(await getJSON('learnings.json')); break;
     case 'books':         break;   /* handled by shelf3d/main.js */
