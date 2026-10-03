@@ -87,7 +87,7 @@ const pad2 = n => String(n).padStart(2, '0');
       requestAnimationFrame(loop);
     })();
     document.addEventListener('pointerover', e => {
-      cur.classList.toggle('big', !!e.target.closest('a, button, summary, .book-slot'));
+      cur.classList.toggle('big', !!e.target.closest('a, button, summary, .book-slot, .hero.ready'));
     });
   }
 
@@ -322,17 +322,6 @@ function renderLearnings(items) {
     </details>`).join('');
 }
 
-function renderBookshelf(books) {
-  document.getElementById('bookshelf').innerHTML = books.map((b, i) => `
-    <div class="book-slot" role="button" tabindex="0" data-index="${i}" style="--spine:${esc(b.spine)};--accent:${esc(b.accent)}"
-         aria-label="${esc(b.title)} by ${esc(b.author)}">
-      <div class="book-spine-vis">
-        <span class="spine-title">${esc(b.title)}</span>
-        <span class="spine-author">${esc(b.author)}</span>
-      </div>
-    </div>`).join('');
-}
-
 function renderContributions(c) {
   document.querySelector('.timeline').innerHTML = c.openSource.map(item => `
     <div class="tl-item reveal">
@@ -353,71 +342,8 @@ function renderContributions(c) {
     </div>`).join('');
 }
 
-/* ── Book reader ──────────────────────────────────────────── */
-function initBookReader(books) {
-  const overlay = document.getElementById('readerOverlay');
-  const cover = document.getElementById('readerCover');
-  const body = document.getElementById('readerBody');
-  const shelf = document.getElementById('bookshelf');
-  const labels = { completed: 'Completed', reading: 'Reading', want: 'Up next' };
-  const TABS = ['Summary', 'Thoughts', 'Details'];
-  let book = null, tab = 0, opener = null;
-
-  const panel = () => {
-    if (tab === 0) return `<p class="rp-text">${esc(book.summary)}</p>`;
-    if (tab === 1) return `<blockquote class="rp-quote">${esc(book.thoughts)}</blockquote>`;
-    const rows = [['Genre', book.genre], ['Time', book.time], ['Finished', book.date]]
-      .filter(r => r[1]).map(r => `<div class="rp-meta-item"><span class="rp-label">${r[0]}</span><span>${esc(r[1])}</span></div>`).join('');
-    return rows + (book.link ? `<a href="${esc(book.link)}" target="_blank" rel="noopener" class="rp-buy-link link-arrow">View on Amazon &nearr;</a>` : '');
-  };
-
-  function draw() {
-    cover.style.setProperty('--spine', book.spine);
-    cover.innerHTML = `
-      <span class="book-status">${labels[book.status] || esc(book.status)}</span>
-      <h2 class="left-title">${esc(book.title)}</h2>
-      <p class="left-author">${esc(book.author)}</p>
-      ${book.rating ? `<div class="left-rating">${esc(book.rating)}</div>` : ''}`;
-    body.innerHTML = `
-      <div class="tabs" role="tablist">${TABS.map((t, i) =>
-        `<button class="tab${i === tab ? ' active' : ''}" role="tab" data-tab="${i}">${t}</button>`).join('')}</div>
-      <div class="tab-panel">${panel()}</div>`;
-  }
-
-  const open = i => {
-    book = books[i]; tab = 0; draw();
-    overlay.classList.add('open'); document.body.style.overflow = 'hidden';
-    overlay.querySelector('.reader-close').focus();
-  };
-  const close = () => {
-    overlay.classList.remove('open'); document.body.style.overflow = '';
-    if (opener) opener.focus();
-  };
-
-  shelf.addEventListener('click', e => {
-    const s = e.target.closest('.book-slot');
-    if (s) { opener = s; open(+s.dataset.index); }
-  });
-  shelf.addEventListener('keydown', e => {
-    const s = e.target.closest('.book-slot');
-    if (s && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); opener = s; open(+s.dataset.index); }
-  });
-  body.addEventListener('click', e => {
-    const t = e.target.closest('.tab');
-    if (t) { tab = +t.dataset.tab; draw(); }
-  });
-  overlay.querySelector('.reader-close').addEventListener('click', close);
-  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-  document.addEventListener('keydown', e => {
-    if (!overlay.classList.contains('open')) return;
-    if (e.key === 'Escape') close();
-    if (e.key === 'ArrowRight') { tab = Math.min(tab + 1, 2); draw(); }
-    if (e.key === 'ArrowLeft')  { tab = Math.max(tab - 1, 0); draw(); }
-  });
-}
-
 /* ── Routing ──────────────────────────────────────────────── */
-const getJSON = f => fetch('content/' + f + '?v=20261003').then(r => r.json());
+const getJSON = f => fetch('content/' + f + '?v=20261004').then(r => r.json());
 
 (async function () {
   switch (PAGE) {
@@ -430,11 +356,7 @@ const getJSON = f => fetch('content/' + f + '?v=20261003').then(r => r.json());
     }
     case 'projects':      renderProjects(await getJSON('projects.json')); break;
     case 'learning':      renderLearnings(await getJSON('learnings.json')); break;
-    case 'books': {
-      const books = await getJSON('books.json');
-      renderBookshelf(books); initBookReader(books);
-      break;
-    }
+    case 'books':         initBooksScene(await getJSON('books.json')); break;
     case 'contributions': renderContributions(await getJSON('contributions.json')); break;
   }
   initScrollReveal();

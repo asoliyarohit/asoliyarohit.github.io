@@ -11,7 +11,8 @@
     "genre": "Data Science",
     "time": "~20 hrs",
     "date": "Aug 2024",
-    "link": "https://www.amazon.com/Python-Data-Science-Handbook-Essential/dp/1491912057"
+    "link": "https://www.amazon.com/Python-Data-Science-Handbook-Essential/dp/1491912057",
+    "isbn": "9781491912058"
   },
   {
     "spine": "#1a472a",
@@ -25,7 +26,8 @@
     "genre": "Python",
     "time": "~14 hrs",
     "date": "May 2024",
-    "link": "https://www.amazon.com/Think-Python-Like-Computer-Scientist/dp/1491939362"
+    "link": "https://www.amazon.com/Think-Python-Like-Computer-Scientist/dp/1491939362",
+    "isbn": "9781491939369"
   },
   {
     "spine": "#2d1b69",
@@ -39,7 +41,8 @@
     "genre": "Data Science",
     "time": "In progress",
     "date": "",
-    "link": ""
+    "link": "",
+    "isbn": "9781492041139"
   },
   {
     "spine": "#3d1a00",
@@ -53,7 +56,8 @@
     "genre": "Growth",
     "time": "~8 hrs",
     "date": "Mar 2024",
-    "link": "https://www.amazon.com/Atomic-Habits-Proven-Build-Break/dp/0735211299"
+    "link": "https://www.amazon.com/Atomic-Habits-Proven-Build-Break/dp/0735211299",
+    "isbn": "9780735211292"
   },
   {
     "spine": "#0f172a",
@@ -67,7 +71,8 @@
     "genre": "Engineering",
     "time": "~16 hrs",
     "date": "",
-    "link": "https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary/dp/0135957052"
+    "link": "https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary/dp/0135957052",
+    "isbn": "9780135957059"
   },
   {
     "spine": "#1a3a1a",
@@ -81,6 +86,7 @@
     "genre": "Statistics",
     "time": "~10 hrs",
     "date": "",
-    "link": "https://www.amazon.com/Statistics-Plain-English-Timothy-Urdan/dp/1138838349"
+    "link": "https://www.amazon.com/Statistics-Plain-English-Timothy-Urdan/dp/1138838349",
+    "isbn": "9781138838345"
   }
 ]
