@@ -7,22 +7,24 @@
   precision highp float;
   uniform vec2 uRes; uniform float uTime, uDepth, uVel, uMode; uniform vec2 uMouse;
   const float PI = 3.14159265;
-  float h11(float p){ p = fract(p * .1031); p *= p + 33.33; p *= p + p; return fract(p); }
   float h21(vec2 p){ vec3 q = fract(vec3(p.xyx) * .1031); q += dot(q, q.yzx + 33.33); return fract((q.x + q.y) * q.z); }
   float glow(float d, float w){ return exp(-d * d / (w * w)); }
 
   void main(){
     vec2 uv = (gl_FragCoord.xy - .5 * uRes) / uRes.y;
-    uv -= uMouse * vec2(.035, .03);
+    uv -= uMouse * vec2(.03, .026);
     float r = length(uv) + 1e-4, a = atan(uv.y, uv.x), lr = log(r);
     float ang = a / (2. * PI);
 
-    /* palette: amber + a little cool blue, on deep space */
-    vec3 amber = vec3(1., .43, .12), hot = vec3(1., .86, .62), ice = vec3(.42, .62, 1.);
-    vec3 col = vec3(.008, .010, .022) + vec3(.05, .022, .01) * exp(-r * 2.6);
+    /* a light technical drawing: ink-blue linework on warm paper */
+    vec3 paper = vec3(.965, .961, .945), wash = vec3(.88, .92, .975);
+    vec3 blue = vec3(.039, .345, .678), sky = vec3(.30, .52, .86), slate = vec3(.30, .35, .45), ink = vec3(.078, .09, .11);
+    vec3 base = mix(paper, wash, .75 * exp(-r * 2.4));
 
-    /* ── light streaks racing out of the core ─────────────────── */
-    float speed = .55 + uVel * 2.2;
+    vec3 acc = vec3(0.); float A = 0.;                /* accumulated linework colour and opacity */
+
+    /* ── fine streaks running out of the core ─────────────────── */
+    float speed = .5 + uVel * 2.0;
     float z = lr * 2.2 - uTime * speed * .35 - uDepth * 1.6;
     for (int k = 0; k < 2; k++) {
       float N = k == 0 ? 72. : 140.;
@@ -31,53 +33,56 @@
       float on = step(.55, hh);
       float zz = z * (k == 0 ? 1. : 1.7) + hh * 31.;
       float s = fract(zz * .5);
-      float len = .35 + uVel * 1.4;
+      float len = .32 + uVel * 1.3;
       float head = smoothstep(0., .015, s) * pow(1. - smoothstep(.015, len, s), 2.2);
-      float line = smoothstep(.20 + .13 * r, 0., f);
-      float fade = smoothstep(.07, .30, r) * (1. - .55 * smoothstep(.9, 1.6, r));
-      vec3 c = mix(amber, ice, step(.78, h21(vec2(id, 3.))));
-      col += c * on * head * line * fade * (k == 0 ? 1.15 : .6);
+      float line = smoothstep(.16 + .10 * r, 0., f);
+      float fade = smoothstep(.07, .30, r) * (1. - .5 * smoothstep(.9, 1.6, r));
+      vec3 c = mix(blue, slate, step(.8, h21(vec2(id, 3.))));
+      float w = on * head * line * fade * (k == 0 ? .78 : .38);
+      acc += c * w; A += w;
     }
 
-    /* ── stardust drifting outward (log-polar cells) ──────────── */
+    /* ── dust drifting outward ────────────────────────────────── */
     for (int k = 0; k < 3; k++) {
       float dens = 14. + float(k) * 16.;
       vec2 g = vec2(ang * dens, lr * dens * .55 - uTime * (.10 + float(k) * .05) * (1. + uVel * 3.) - uDepth * (.7 + float(k) * .3));
       vec2 id = floor(g), f = fract(g) - .5;
       vec2 o = vec2(h21(id), h21(id + 17.3)) - .5;
       float d = length((f - o * .7) * vec2(1., 1. + uVel * 5.));
-      float tw = .55 + .45 * sin(uTime * (1. + h21(id) * 3.) + h21(id + 4.) * 6.);
       float size = .035 + .05 * h21(id + 9.);
-      float star = smoothstep(size, 0., d) * step(.55, h21(id + 2.)) * tw;
-      col += mix(vec3(.75, .85, 1.), hot, h21(id + 5.)) * star * smoothstep(.06, .4, r) * (.75 - float(k) * .17);
+      float star = smoothstep(size, 0., d) * step(.55, h21(id + 2.));
+      float w = star * smoothstep(.06, .4, r) * (.5 - float(k) * .12);
+      acc += slate * w; A += w;
     }
 
-    /* ── rings: each one swells and passes you as you scroll ──── */
-    float ringSum = 0.;
+    /* ── rings: each swells and passes you as you scroll ──────── */
+    float ringSum = 0., halo = 0.;
     for (int i = 0; i < 6; i++) {
-      float d = uDepth - float(i);                       /* where this ring is on its journey */
+      float d = uDepth - float(i);
       float R = .42 * exp(1.18 * d);
       float life = smoothstep(-4.2, -2.2, d) * (1. - smoothstep(.55, 1.15, d));
-      float w = .0032 + .010 * clamp(R, 0., 1.4);
-      float body = glow(r - R, w) * 1.2 + glow(r - R, w * 7.) * .22 + glow(r - R, w * 26.) * .05;
-      float spark = .75 + .25 * sin(a * 3. + uTime * .4 + float(i));
-      ringSum += body * life * spark;
+      float w = .0026 + .007 * clamp(R, 0., 1.4);
+      ringSum += glow(r - R, w) * life;
+      halo += glow(r - R, w * 12.) * life * .16;
     }
-    col += mix(amber, hot, .35) * ringSum;
-    /* hair-line chromatic fringe on the lead ring */
-    col.b += ringSum * .12;
+    acc += blue * ringSum * .9 + sky * halo; A += ringSum * .9 + halo;
 
-    /* ── the core ─────────────────────────────────────────────── */
-    float coreR = .088 + .004 * sin(uTime * .8);
-    col *= smoothstep(coreR - .012, coreR + .01, r) * .93 + .07;
-    col += amber * glow(r - coreR, .006) * .55 + amber * glow(r - coreR, .04) * .18;
-    vec2 orb = coreR * 1.18 * vec2(cos(uTime * .55), sin(uTime * .55));
-    col += hot * glow(length(uv - orb) - .011, .0035) * .9;
+    float a2 = clamp(A, 0., 1.) * (1. - uMode * .88);   /* fade the linework out behind text */
+    vec3 feat = acc / max(A, 1e-3);
+    vec3 col = mix(base, feat, a2);
 
-    /* soft vignette + film grain */
-    col *= 1. - .55 * smoothstep(.45, 1.15, r);
-    col += (h21(gl_FragCoord.xy + fract(uTime) * 91.) - .5) * .018;
-    col *= mix(1., .55, uMode);                         /* dim when a window sits on top */
+    /* ── the core: a thin ring and a pin-point, nothing heavy ─── */
+    float coreR = .07 + .003 * sin(uTime * .8);
+    float calm = 1. - uMode * .35;
+    col = mix(col, wash, (1. - smoothstep(coreR - .004, coreR + .004, r)) * .85);
+    col = mix(col, blue, glow(r - coreR, .0032) * .95 * calm);
+    col = mix(col, blue, glow(r - coreR * 1.55, .0024) * .45 * calm);
+    col = mix(col, ink, (1. - smoothstep(.006, .012, r)) * calm);
+    vec2 orb = coreR * 1.55 * vec2(cos(uTime * .55), sin(uTime * .55));
+    col = mix(col, blue, glow(length(uv - orb) - .009, .003) * .95 * calm);
+
+    col *= 1. - .05 * smoothstep(.5, 1.2, r);
+    col += (h21(gl_FragCoord.xy + fract(uTime) * 91.) - .5) * .01;
     gl_FragColor = vec4(col, 1.);
   }`;
 

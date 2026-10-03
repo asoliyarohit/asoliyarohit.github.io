@@ -1,7 +1,7 @@
 /* The reading room: bookcase, panelled wall, wooden floor, rug, lamp, plant. */
 import * as THREE from '../vendor/three.bundle.js';
 import { RoundedBoxGeometry, RoomEnvironment } from '../vendor/three.bundle.js';
-import { makeWood, makeWall, makeRug, mulberry32, cv, tex } from './textures.js?v=20261010';
+import { makeWood, makeWall, makeRug, mulberry32, cv, tex } from './textures.js?v=20261015';
 
 export const LAYOUT = {
   wallZ: -1.4,

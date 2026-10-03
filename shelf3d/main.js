@@ -3,9 +3,9 @@
    a little robot tidies it, the camera moves in, and you read it by
    clicking its pages. */
 import * as THREE from '../vendor/three.bundle.js';
-import { buildRoom, LAYOUT } from './room.js?v=20261010';
-import { Drone, Robot } from './characters.js?v=20261010';
-import { Book3D, DIM } from './book.js?v=20261010';
+import { buildRoom, LAYOUT } from './room.js?v=20261015';
+import { Drone, Robot } from './characters.js?v=20261015';
+import { Book3D, DIM } from './book.js?v=20261015';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const Q = () => new THREE.Quaternion();
@@ -79,10 +79,13 @@ export async function start(root, books) {
   const camTo = (pos, look, dur, ease = E.inOut) => { const p0 = cam.pos.clone(), l0 = cam.look.clone(); return tween(dur, t => { cam.pos.lerpVectors(p0, pos, t); cam.look.lerpVectors(l0, look, t); }, ease); };
   const moveV = (v, to, dur, ease) => { const a = v.clone(); return tween(dur, t => v.lerpVectors(a, to, t), ease); };
 
+  /* while the drones carry a book home, the camera follows it so it never leaves the frame */
+  const follow = { on: false };
+
   /* ── a book held by two drones ───────────────────────── */
   const carry = { on: false, book: null, pivot: V(), quat: Q(), wob: 0, offA: V(-.13, .4, .02), offB: V(.13, .4, -.02), lift: 0, gap: .09, follow: 9 };
   const tmpQ = Q(), alignQ = Q().setFromRotationMatrix(new THREE.Matrix4().makeBasis(V(0, 1, 0), V(0, 0, -1), V(-1, 0, 0)));
-  const _a = V(), _b = V(), _c = V(), _d = V();
+  const _a = V(), _b = V(), _c = V(), _d = V(), _f1 = V(), _f2 = V();
   function syncCarry(dt) {
     if (!carry.on) return; const bk = carry.book, pl = bk.gripLocal(.5);
     const R = tmpQ.copy(carry.quat).multiply(qAxis(X, carry.wob));
@@ -257,7 +260,7 @@ export async function start(root, books) {
     }
     bk.group.position.copy(cur.bkRest); bk.group.quaternion.copy(cur.bkQ);
     robot.group.visible = true; robot.group.position.set(3.1, 0, 1.15); robot.group.rotation.y = -Math.PI / 2 + .1; robot.setEyes('normal');
-    camTo(CAM_HOME.pos.clone().add(V(0, .1, -.3)), V(0, .55, .4), 2.4, E.sine);
+    camTo(V(0, 1.45, 3.7), V(0, .5, .6), 2.4, E.sine);
     dA.group.visible = dB.group.visible = true; dA.group.position.set(-3.3, 3, .8); dB.group.position.set(3.3, 3.1, .5);
     carry.on = false; bk.group.updateMatrixWorld(true);
     const slot = slots[bk.index], T = bk.T;
@@ -267,7 +270,7 @@ export async function start(root, books) {
     carry.book = bk; carry.pivot.copy(startPivot); carry.quat.copy(lying); carry.wob = 0; carry.lift = .12; carry.gap = .09; carry.offA.set(-.13, .42, .04); carry.offB.set(.13, .42, -.04);
     const hA = hoverFor(bk, FA, carry.offA), hB = hoverFor(bk, FB, carry.offB); hA.y += .12; hB.y += .12;
     await Promise.all([fly(dA, hA, 2.0, .5), (async () => { await wait(.2); await fly(dB, hB, 2.0, .45); })()]);
-    carry.on = true; carry.follow = 7;
+    carry.on = true; carry.follow = 7; follow.on = true;
     await tween(.8, t => { carry.lift = lerp(.12, 0, t); }, E.sine); const gc = gapClosed(bk);
     await tween(.5, t => { carry.gap = lerp(.09, gc, t); }, E.inOut);
     /* lift, swing upright and travel to the slot */
@@ -280,6 +283,7 @@ export async function start(root, books) {
     await tween(1.4, t => { carry.pivot.y = lerp(hoverP.y, pivotHome.y, t); carry.pivot.x = pivotHome.x + Math.sin(t * 8) * .002 * (1 - t); carry.pivot.z = pivotHome.z; }, E.inOut);
     await wait(.15);
     await tween(.6, t => { carry.gap = lerp(gc, .09, t); }, E.out);
+    follow.on = false;
     carry.on = false; bk.group.quaternion.copy(STAND); bk.group.position.copy(targetPos); bk.home = targetPos.clone();
     await Promise.all([fly(dA, V(-3.4, 3.3, .6), 2.0, .3, E.in), fly(dB, V(3.4, 3.4, .4), 2.1, .3, E.in), camTo(CAM_HOME.pos, CAM_HOME.look, 2.4, E.sine)]);
     dA.group.visible = dB.group.visible = robot.group.visible = false;
@@ -325,6 +329,11 @@ export async function start(root, books) {
     syncCarry(dt);
     if (!carry.on) drones.forEach(d => { const k = 1 - Math.exp(-dt * 6); d.grip.quaternion.slerp(Q(), k); d.setRod(lerp(d.rodLen, .16, 1 - Math.exp(-dt * 4))); d.hand.quaternion.slerp(Q(), k); });
     dA.update(dt, t, carry.on ? 1 : 0); dB.update(dt, t, carry.on ? 1 : 0); robot.update(dt, t);
+    if (follow.on && carry.on) {
+      const p = carry.pivot, kp = 1 - Math.exp(-dt * 2.4), kl = 1 - Math.exp(-dt * 3.4);
+      cam.pos.lerp(_f1.set(p.x * .4, clamp(p.y * .55 + .8, 1.3, 2.1), 4.5), kp);
+      cam.look.lerp(_f2.set(p.x, p.y + .1, p.z), kl);
+    }
     camera.position.set(cam.pos.x + Math.sin(t * .31) * .035, cam.pos.y + Math.sin(t * .23) * .02, cam.pos.z); camera.lookAt(cam.look);
     if (draw) renderer.render(scene, camera);
   };

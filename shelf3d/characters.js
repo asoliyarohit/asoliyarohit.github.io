@@ -2,7 +2,7 @@
    Everything is modelled from primitives with physically based materials. */
 import * as THREE from '../vendor/three.bundle.js';
 import { RoundedBoxGeometry } from '../vendor/three.bundle.js';
-import { cv } from './textures.js?v=20261010';
+import { cv } from './textures.js?v=20261015';
 
 const phys = (color, o = {}) => new THREE.MeshPhysicalMaterial({ color, roughness: .32, metalness: 0, clearcoat: .8, clearcoatRoughness: .18, ...o });
 const std = (color, rough = .5, metal = 0) => new THREE.MeshStandardMaterial({ color, roughness: rough, metalness: metal });

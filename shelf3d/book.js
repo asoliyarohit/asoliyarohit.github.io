@@ -4,7 +4,7 @@
    Covers are rigid boards on hinges; every page is a bendable surface, so a
    turning page curls the way real paper does. */
 import * as THREE from '../vendor/three.bundle.js';
-import { cv, tex, mulberry32, speckle, makePaperCanvas, makePageEdge } from './textures.js?v=20261010';
+import { cv, tex, mulberry32, speckle, makePaperCanvas, makePageEdge } from './textures.js?v=20261015';
 
 export const DIM = { H: .34, W: .235, cb: .0046, ov: .008 };
 const SERIF = '"Instrument Serif", "Iowan Old Style", "Palatino Linotype", Georgia, serif';

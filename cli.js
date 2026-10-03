@@ -3,12 +3,12 @@
    that knows about the whole site. The pixel chipmunk lives on top of it. */
 (function () {
   const DATA = {};
-  const load = async name => DATA[name] || (DATA[name] = await fetch('content/' + name + '.json?v=20261011').then(r => r.json()));
+  const load = async name => DATA[name] || (DATA[name] = await fetch('content/' + name + '.json?v=20261015').then(r => r.json()));
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const pad = (s, n) => String(s).padEnd(n, ' ');
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const THEMES = { amber: ['#ff9a2e', '#9c5a14', '#120a05'], green: ['#4cf08a', '#1f8f4d', '#06100a'], ice: ['#7fd6ff', '#3c7da3', '#050d14'], paper: ['#f3e7c9', '#9a8a68', '#15110c'] };
+  const THEMES = { ice: ['#cfe3ff', '#7f93b3', '#0e1624', '#ffffff'], mono: ['#e9e9e9', '#8a8a8a', '#101010', '#ffffff'], paper: ['#1d232c', '#6a7280', '#f2f0ea', '#000000'], violet: ['#e2dcff', '#8f86bf', '#14122a', '#ffffff'] };
   const PAGES = { home: 'index.html', work: 'projects.html', projects: 'projects.html', journal: 'journal.html', learning: 'learning.html', shelf: 'books.html', books: 'books.html', 'open-source': 'contributions.html', contributions: 'contributions.html', contact: 'mailto:asoliyarohit@gmail.com' };
   PAGES.journal = 'learning.html';
 
@@ -43,7 +43,7 @@
             <div class="t-out" aria-live="polite"></div>
             <label class="t-line"><span class="t-ps1">rohit@portfolio:~$</span><input class="t-in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a command" /></label>
             <div class="t-chips"><button type="button">help</button><button type="button">about</button><button type="button">projects</button><button type="button">skills</button><button type="button">shelf</button><button type="button">contact</button></div>
-            <div class="t-status"><span>LATENCY <em data-v="lat2">25</em>ms</span><span>KEYS <em data-v="keys2">0</em></span><span>THEME <em data-v="theme">amber</em></span></div>
+            <div class="t-status"><span>LATENCY <em data-v="lat2">25</em>ms</span><span>KEYS <em data-v="keys2">0</em></span><span>THEME <em data-v="theme">ice</em></span></div>
           </div>
           <div class="t-crt" aria-hidden="true"></div>
         </div>
@@ -51,7 +51,7 @@
     const q = s => host.querySelector(s), qa = s => [...host.querySelectorAll(s)];
     const win = q('.t-win'), bubble = q('.t-bubble'), out = q('.t-out'), input = q('.t-in'), idle = q('.t-idle'), shell = q('.t-shell');
     const mascot = createMascot(q('.t-chip'));
-    const ctl = { state: 'asleep', keys: 0, lat: 25, history: [], hi: -1, theme: 'amber', tipTimer: 0, visible: true, booted: false };
+    const ctl = { state: 'asleep', keys: 0, lat: 25, history: [], hi: -1, theme: 'ice', tipTimer: 0, visible: true, booted: false };
     const setState = s => { ctl.state = s; host.dataset.state = s; };
 
     /* ── speech bubble ─────────────────────────────────── */
@@ -66,18 +66,19 @@
     const dpr = Math.min(devicePixelRatio || 1, 2), ch = {};
     qa('canvas[data-c]').forEach(c => { ch[c.dataset.c] = { c, ctx: c.getContext('2d'), v: Array.from({ length: 28 }, (_, i) => Math.exp(-i / 7) * (.7 + Math.random() * .3)), w: 0, h: 0 }; });
     const walk = [Array.from({ length: 48 }, () => .3 + Math.random() * .2), Array.from({ length: 48 }, () => .2 + Math.random() * .1)];
-    const css = () => getComputedStyle(host).getPropertyValue('--t-fg').trim() || '#ff9a2e';
+    const css = () => getComputedStyle(host).getPropertyValue('--t-fg').trim() || '#cfe3ff';
+    const hi = () => getComputedStyle(host).getPropertyValue('--t-hi').trim() || '#fff';
     const fitC = o => { const r = o.c.getBoundingClientRect(); if (!r.width) return false; const w = Math.round(r.width * dpr), h = Math.round(r.height * dpr); if (o.w !== w || o.h !== h) { o.c.width = w; o.c.height = h; o.w = w; o.h = h; } return true; };
     function drawBars(o, tick) {
       if (!fitC(o)) return; const { ctx, w, h } = o, col = css(); ctx.clearRect(0, 0, w, h);
-      const n = 28, bw = w / n; o.v.forEach((v, i) => { const base = Math.exp(-i / 7) * (.85 + .15 * Math.sin(tick * .8 + i * .5)); o.v[i] += (base - v) * .12; const bh = Math.max(2, o.v[i] * (h - 14)); ctx.fillStyle = i === 0 ? '#ffe9b8' : col; ctx.globalAlpha = i === 0 ? 1 : .82; ctx.fillRect(i * bw + 1, h - bh, bw - 2, bh); });
-      ctx.globalAlpha = 1; ctx.strokeStyle = '#ffe9b8'; ctx.lineWidth = 1.5 * dpr; ctx.beginPath(); o.v.forEach((v, i) => { const x = i * bw + bw / 2, y = h - Math.max(2, v * (h - 14)) - 6 * dpr * (1 - i / n); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
+      const n = 28, bw = w / n; o.v.forEach((v, i) => { const base = Math.exp(-i / 7) * (.85 + .15 * Math.sin(tick * .8 + i * .5)); o.v[i] += (base - v) * .12; const bh = Math.max(2, o.v[i] * (h - 14)); ctx.fillStyle = i === 0 ? hi() : col; ctx.globalAlpha = i === 0 ? 1 : .82; ctx.fillRect(i * bw + 1, h - bh, bw - 2, bh); });
+      ctx.globalAlpha = 1; ctx.strokeStyle = hi(); ctx.lineWidth = 1.5 * dpr; ctx.beginPath(); o.v.forEach((v, i) => { const x = i * bw + bw / 2, y = h - Math.max(2, v * (h - 14)) - 6 * dpr * (1 - i / n); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
     }
     function drawLine(o, series, extra) {
       if (!fitC(o)) return; const { ctx, w, h } = o, col = css(); ctx.clearRect(0, 0, w, h);
       ctx.strokeStyle = col; ctx.globalAlpha = .22; ctx.lineWidth = 1; for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(0, h * i / 4); ctx.lineTo(w, h * i / 4); ctx.stroke(); }
       ctx.globalAlpha = 1; ctx.lineWidth = 1.6 * dpr; ctx.beginPath(); series.forEach((v, i) => { const x = i / (series.length - 1) * w, y = h - v * (h - 6) - 3; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
-      const lv = series[series.length - 1]; ctx.fillStyle = '#ffe9b8'; ctx.fillRect(w - 4 * dpr, h - lv * (h - 6) - 5, 4 * dpr, 4 * dpr);
+      const lv = series[series.length - 1]; ctx.fillStyle = hi(); ctx.fillRect(w - 4 * dpr, h - lv * (h - 6) - 5, 4 * dpr, 4 * dpr);
     }
     let tick = 0, lastDraw = 0, raf = 0;
     const frame = t => {
@@ -129,7 +130,7 @@
     }
 
     /* ── states: asleep → booting → ready (or napping) ───── */
-    function setTheme(n) { const t = THEMES[n]; if (!t) return; ctl.theme = n; host.style.setProperty('--t-fg', t[0]); host.style.setProperty('--t-dim', t[1]); host.style.setProperty('--t-bg', t[2]); const e = q('[data-v=theme]'); if (e) e.textContent = n; }
+    function setTheme(n) { const t = THEMES[n]; if (!t) return; ctl.theme = n; host.style.setProperty('--t-fg', t[0]); host.style.setProperty('--t-dim', t[1]); host.style.setProperty('--t-bg', t[2]); host.style.setProperty('--t-hi', t[3]); host.style.setProperty('--t-line', 'color-mix(in srgb, ' + t[0] + ' 30%, transparent)'); host.classList.toggle('light-term', t[2] === '#f2f0ea'); const e = q('[data-v=theme]'); if (e) e.textContent = n; }
     const tips = ['psst… type <b>projects</b>', 'try <b>sudo hire rohit</b> 😉', '<b>open shelf</b> — drones will fetch a book', 'try <b>theme</b> for new colours', 'Tab completes commands'];
     function startTips() { clearInterval(ctl.tipTimer); let i = 0; ctl.tipTimer = setInterval(() => { if (ctl.state === 'ready' && ctl.visible) { say(`<p>${tips[i++ % tips.length]}</p>`, 5200); } }, 14000); }
     async function boot() {
@@ -176,7 +177,7 @@
       q('.t-bar').addEventListener('pointerup', end); q('.t-bar').addEventListener('pointercancel', end);
     }
 
-    setTheme('amber'); setState('asleep'); welcome();
+    setTheme('ice'); setState('asleep'); welcome();
     return {
       boot, nap, wake, say, mascot, el: host, focus: () => input.focus({ preventScroll: true }),
       destroy() { cancelAnimationFrame(raf); clearInterval(ctl.tipTimer); removeEventListener('keydown', onKey); io.disconnect(); mascot.destroy(); },

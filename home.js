@@ -4,7 +4,7 @@
   const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const getJSON = f => fetch('content/' + f + '?v=20261011').then(r => r.json());
+  const getJSON = f => fetch('content/' + f + '?v=20261015').then(r => r.json());
 
   async function init() {
     /* loader: a big counting number, like stepping into the tunnel */
@@ -47,9 +47,9 @@
     stops.forEach((el, i) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.label = el.dataset.label; b.setAttribute('aria-label', 'Go to ' + el.dataset.label); b.onclick = () => el.scrollIntoView({ behavior: 'smooth', block: 'start' }); ticks.append(b); });
     const setBeat = i => {
       const el = stops[i]; if (!el) return;
-      hudS.textContent = String(i + 1).padStart(2, '0') + ' · ' + el.dataset.label; hudH.textContent = el.dataset.hint || '';
+      hudH.textContent = String(i + 1).padStart(2, '0') + ' · ' + el.dataset.label + (el.dataset.hint ? '  —  ' + el.dataset.hint : '');
       [...ticks.children].forEach((b, k) => b.classList.toggle('on', k === i));
-      if (tun) tun.setMode([0, .5, .62, .5][+el.dataset.read] || 0);
+      if (tun) tun.setMode([.3, .82, .88, .82][+el.dataset.read] || 0);
       beats.forEach(b => b.classList.toggle('reading', b === el && b.dataset.read !== '0'));
     };
     const bio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setBeat(stops.indexOf(e.target)); }), { threshold: .5 });
