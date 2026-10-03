@@ -343,7 +343,7 @@ function renderContributions(c) {
 }
 
 /* ── Routing ──────────────────────────────────────────────── */
-const getJSON = f => fetch('content/' + f + '?v=20261004').then(r => r.json());
+const getJSON = f => fetch('content/' + f + '?v=20261006').then(r => r.json());
 
 (async function () {
   switch (PAGE) {
