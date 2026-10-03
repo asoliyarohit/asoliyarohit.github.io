@@ -417,7 +417,7 @@ function initBookReader(books) {
 }
 
 /* ── Routing ──────────────────────────────────────────────── */
-const getJSON = f => fetch('content/' + f).then(r => r.json());
+const getJSON = f => fetch('content/' + f + '?v=20261003').then(r => r.json());
 
 (async function () {
   switch (PAGE) {
