@@ -343,7 +343,7 @@ function renderContributions(c) {
 }
 
 /* ── Routing ──────────────────────────────────────────────── */
-const getJSON = f => fetch('content/' + f + '?v=20261008').then(r => r.json());
+const getJSON = f => fetch('content/' + f + '?v=20261010').then(r => r.json());
 
 (async function () {
   switch (PAGE) {
@@ -356,7 +356,7 @@ const getJSON = f => fetch('content/' + f + '?v=20261008').then(r => r.json());
     }
     case 'projects':      renderProjects(await getJSON('projects.json')); break;
     case 'learning':      renderLearnings(await getJSON('learnings.json')); break;
-    case 'books':         initBooksScene(await getJSON('books.json')); break;
+    case 'books':         break;   /* handled by shelf3d/main.js */
     case 'contributions': renderContributions(await getJSON('contributions.json')); break;
   }
   initScrollReveal();

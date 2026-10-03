@@ -12,40 +12,42 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20261008" />
+  <link rel="stylesheet" href="style.css?v=20261010" />
   <script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-page="books">
 <main>
-  <div class="room" id="room">
-    <div class="wall"></div>
-    <div class="lamp"></div>
+  <div class="room3d" id="room3d" data-state="idle">
+    <canvas id="stage" aria-label="A reading room: pick a book on the shelf and two drones will fetch it"></canvas>
+    <div class="bar bar-top"></div><div class="bar bar-bottom"></div>
     <div class="room-title container">
       <p class="mono">04 &mdash; Shelf</p>
       <h1>On the <em class="serif">shelf</em></h1>
     </div>
-    <div class="shelf-unit">
-      <div class="shelf-row" id="bookshelf"></div>
-      <div class="shelf-board"></div>
-    </div>
-    <div class="floor"></div>
-    <div class="carpet"></div>
-    <div class="actors" id="actors"></div>
-    <div class="vignette"></div>
-    <div class="bar bar-top"></div><div class="bar bar-bottom"></div>
     <div class="titlecard" id="titlecard"></div>
-    <div class="controls" id="controls">
-      <button data-act="prev">&lsaquo; Prev</button>
-      <span id="plabel"></span>
-      <button data-act="next">Next &rsaquo;</button>
-      <button data-act="close" class="ghost">Put it back</button>
-    </div>
-    <p class="hint mono" id="hint">Pick a book &mdash; the chipmunks will fetch it</p>
+    <button class="putback" id="putback" type="button">Put it back on the shelf</button>
+    <p class="hint mono" id="hint">Pick a book &mdash; the helpers will fetch it</p>
+    <div class="loader" id="loader"><span class="mono">Setting the scene&hellip;</span></div>
+    <div class="fallback" id="fallback" hidden></div>
   </div>
 </main>
 
-<script src="critters.js?v=20261008"></script>
-<script src="books.js?v=20261008"></script>
-<script src="script.js?v=20261008"></script>
+<script type="module">
+  const root = document.getElementById('room3d');
+  const books = await fetch('content/books.json').then(r => r.json());
+  try {
+    const { start } = await import('./shelf3d/main.js?v=20261010');
+    await start(root, books);
+  } catch (err) {
+    console.error(err);
+    /* no WebGL: show the shelf as a plain, readable list instead */
+    root.classList.add('flat');
+    document.getElementById('loader').classList.add('gone');
+    const fb = document.getElementById('fallback'); fb.hidden = false;
+    fb.innerHTML = '<div class="container"><p class="mono">Your browser can\u2019t show the 3D reading room, so here is the shelf as a list.</p>' +
+      books.map(b => `<article><h3>${b.title}</h3><p class="mono">${b.author}</p><p>${b.summary}</p>${b.link ? `<a class="link-arrow" href="${b.link}" target="_blank" rel="noopener">Find it on Amazon &nearr;</a>` : ''}</article>`).join('') + '</div>';
+  }
+</script>
+<script src="script.js?v=20261010"></script>
 </body>
 </html>
