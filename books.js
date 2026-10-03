@@ -18,38 +18,6 @@
   const TALL  = [1, .86, .93, .8, .97, .84];
   const STATUS = { completed: 'Completed', reading: 'Reading now', want: 'On the list' };
 
-  /* ── a chipmunk, facing right ─────────────────────────── */
-  const CM_SVG = `
-  <svg viewBox="0 0 160 120" aria-hidden="true">
-    <ellipse cx="76" cy="113" rx="42" ry="5" fill="rgba(0,0,0,.4)"/>
-    <g class="tail">
-      <path d="M46 90 C6 98 -6 44 24 12 C26 40 42 58 66 70 Z" fill="#c4813f"/>
-      <path d="M24 12 C26 40 42 58 66 70" fill="none" stroke="#3b2314" stroke-width="3.2"/>
-      <path d="M17 34 C22 54 36 68 56 76" fill="none" stroke="#f3e2c0" stroke-width="3"/>
-    </g>
-    <g class="body">
-      <g class="legb"><ellipse cx="50" cy="96" rx="15" ry="13" fill="#b87438"/><ellipse cx="43" cy="109" rx="12" ry="5.5" fill="#8a5428"/></g>
-      <ellipse cx="74" cy="78" rx="38" ry="25" fill="#c98544"/>
-      <path d="M48 63 Q74 49 100 63" fill="none" stroke="#3b2314" stroke-width="5" stroke-linecap="round"/>
-      <path d="M45 71 Q74 57 103 71" fill="none" stroke="#f3e2c0" stroke-width="4" stroke-linecap="round"/>
-      <path d="M44 79 Q74 65 104 79" fill="none" stroke="#3b2314" stroke-width="4" stroke-linecap="round"/>
-      <ellipse cx="80" cy="95" rx="25" ry="9" fill="#f6e7c8"/>
-    </g>
-    <g class="legf"><ellipse cx="96" cy="97" rx="12" ry="11" fill="#b87438"/><ellipse cx="102" cy="109" rx="11" ry="5" fill="#8a5428"/></g>
-    <g class="head">
-      <circle cx="103" cy="45" r="8" fill="#b87438"/><circle cx="103" cy="45" r="4" fill="#e8b08a"/>
-      <circle cx="114" cy="62" r="21" fill="#cf8d4b"/>
-      <ellipse cx="122" cy="73" rx="13" ry="10" fill="#f6e7c8"/>
-      <path d="M104 52 Q120 46 136 55" fill="none" stroke="#3b2314" stroke-width="3.4" stroke-linecap="round"/>
-      <path d="M105 46 Q121 40 134 48" fill="none" stroke="#f3e2c0" stroke-width="3" stroke-linecap="round"/>
-      <g class="eye"><circle cx="122" cy="61" r="4" fill="#1c120b"/><circle cx="123.3" cy="59.6" r="1.4" fill="#fff"/></g>
-      <ellipse cx="136" cy="67" rx="3.8" ry="3" fill="#2a1710"/>
-      <path d="M130 73 Q134 76 138 73" fill="none" stroke="#2a1710" stroke-width="1.4" stroke-linecap="round"/>
-      <path d="M136 70 L150 66 M136 71 L150 72" stroke="#2a1710" stroke-width=".8" opacity=".5"/>
-    </g>
-    <g class="arm"><path d="M104 84 L124 91" stroke="#b87438" stroke-width="8" stroke-linecap="round"/><circle cx="127" cy="92" r="5" fill="#8a5428"/></g>
-  </svg>`;
-
   /* ── cover + page templates ───────────────────────────── */
   const coverSrc = b => b.cover || (b.isbn ? `https://covers.openlibrary.org/b/isbn/${b.isbn}-L.jpg?default=false` : '');
   const coverHTML = b => `
@@ -110,6 +78,7 @@
     const room = $('#room'), actors = $('#actors'), shelfRow = $('#bookshelf');
     const controls = $('#controls'), titlecard = $('#titlecard'), hint = $('#hint'), plabel = $('#plabel');
     renderShelf(books);
+    ensureCritterDefs();
 
     let state = 'idle';          // idle | busy | landed | open
     let cur = null;              // the book currently out of the shelf
@@ -143,7 +112,7 @@
       hero.style.cssText = `--W:${m.W}px;--H:${m.H}px;--D:${m.D}px;--spine:${book.spine};--accent:${book.accent};width:${m.W}px;height:${m.H}px;visibility:hidden`;
       const pg = pages(book);
       const leaf = (i, front, back) => `<div class="leaf" data-i="${i}" style="transform:rotateY(0deg) translateZ(${3 - i}px) skewY(0deg)">
-        <div class="face front">${front}<div class="shade"></div></div><div class="face back">${back}<div class="shade"></div></div></div>`;
+        <div class="face front">${front}<div class="shade"></div><div class="shine"></div></div><div class="face back">${back}<div class="shade"></div><div class="shine"></div></div></div>`;
       hero.innerHTML = `
         <div class="hb-box">
           <div class="face f-front">${coverHTML(book)}</div>
@@ -157,18 +126,21 @@
           ${leaf(1, pg.summary, pg.thoughts)}
           ${leaf(0, coverHTML(book), pg.exlibris)}
           <div class="cast cast-r"></div><div class="cast cast-l"></div>
+          <div class="gutter-glow"></div>
         </div>`;
       wireCovers(hero);
       return hero;
     }
 
     /* ── chipmunk helpers ─────────────────────────────────── */
-    function spawnCM(flip, cmW) {
+    const shuffle = arr => arr.map(v => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map(x => x[1]);
+    function spawnCM(flip, baseW, species) {
+      const c = CRITTERS[species], w = baseW * c.scale, h = w * c.vb[1] / c.vb[0];
       const el = document.createElement('div');
-      el.className = 'cm' + (flip ? ' flip' : '');
-      el.style.setProperty('--cmw', cmW + 'px');
-      el.innerHTML = CM_SVG;
-      el.w = cmW; el.h = cmW * .75;
+      el.className = `cm sp-${species}` + (flip ? ' flip' : '');
+      el.style.cssText = `--cmw:${w}px;aspect-ratio:${c.vb[0]} / ${c.vb[1]}`;
+      el.innerHTML = c.svg;
+      Object.assign(el, { w, h, sp: species, cfg: c, hand: c.hand[0] / c.vb[0] });
       actors.appendChild(el);
       return el;
     }
@@ -178,9 +150,10 @@
 
     /* a gait: quick pick-up, hops that fade in and out, forward lean while
        cruising, and a back-lean skid as they arrive */
-    function runFrames(cm, x0, x1, feet, { speed = .62, hop = 9 } = {}) {
-      const dist = Math.abs(x1 - x0), dir = x1 > x0 ? 1 : -1, dur = dist / speed;
-      const strides = Math.max(2, Math.round(dist / (cm.w * .8)));
+    function runFrames(cm, x0, x1, feet, { speed = .62 } = {}) {
+      const c = cm.cfg, hop = c.hop;
+      const dist = Math.abs(x1 - x0), dir = x1 > x0 ? 1 : -1, dur = dist / (speed * c.speed);
+      const strides = Math.max(2, Math.round(dist / (cm.w * c.strides)));
       const fr = frames(Math.max(30, Math.round(dur / 16)), t => {
         const p = .5 * t + .5 * smooth(t);
         const ph = Math.abs(Math.sin(Math.PI * strides * p));
@@ -188,7 +161,7 @@
         const cruise = Math.min(1, t / .15) * (1 - smooth(clamp(0, (t - .72) / .2, 1)));
         const skid = Math.sin(Math.PI * clamp(0, (t - .82) / .18, 1));
         return cmF(cm, lerp(x0, x1, p), feet - hop * ph * env, {
-          rot: dir * (7 * cruise - 9 * skid),
+          rot: dir * (7 * cruise - 9 * skid) + c.waddle * Math.sin(2 * Math.PI * strides * p) * env,
           sy: 1 + (ph - .5) * .08 * env - .05 * skid,
           sx: 1 - (ph - .5) * .06 * env + .05 * skid,
         }, { offset: t });
@@ -273,6 +246,106 @@
       }
     }
 
+    /* ── the magic: floating light, runes, an aura, ink that writes itself ── */
+    const RUNES = (() => {
+      const sig = [
+        '<path d="M100 13 l3.200 5.500 -3.200 5.500 -3.200 -5.500 z" fill="#ffd98a" stroke="none"/>',
+        '<path d="M96 14 a6.500 6.500 0 1 0 8 0 a4.800 4.800 0 1 1 -8 0 z" fill="#ffd98a" stroke="none"/>',
+        '<path d="M100 12 v11 M95.500 17 h9"/>',
+        '<circle cx="96.500" cy="18" r="1.200" fill="#ffd98a" stroke="none"/><circle cx="100" cy="18" r="1.200" fill="#ffd98a" stroke="none"/><circle cx="103.500" cy="18" r="1.200" fill="#ffd98a" stroke="none"/>',
+      ];
+      let g = '';
+      for (let k = 0; k < 24; k++) g += `<g transform="rotate(${k * 15} 100 100)">${sig[k % 4]}</g>`;
+      const tri = rot => [0, 1, 2].map(i => { const a = (rot + i * 120) * Math.PI / 180; return `${(100 + 66 * Math.cos(a)).toFixed(1)},${(100 + 66 * Math.sin(a)).toFixed(1)}`; }).join(' ');
+      return `<svg viewBox="0 0 200 200" fill="none" stroke="#ffd98a" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="100" cy="100" r="97"/><circle cx="100" cy="100" r="90" stroke-dasharray="1 3.200"/><circle cx="100" cy="100" r="70" stroke-width=".7"/>
+        ${g}<polygon points="${tri(-90)}"/><polygon points="${tri(90)}"/><circle cx="100" cy="100" r="20" stroke-width=".7"/><circle cx="100" cy="100" r="3" fill="#ffd98a" stroke="none"/></svg>`;
+    })();
+
+    const magic = (() => {
+      const canvas = document.createElement('canvas'); canvas.className = 'motes'; room.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      const sprite = document.createElement('canvas'); sprite.width = sprite.height = 32;
+      { const g = sprite.getContext('2d'), r = g.createRadialGradient(16, 16, 0, 16, 16, 16);
+        r.addColorStop(0, 'rgba(255,248,214,1)'); r.addColorStop(.25, 'rgba(255,216,130,.85)'); r.addColorStop(1, 'rgba(255,190,90,0)');
+        g.fillStyle = r; g.fillRect(0, 0, 32, 32); }
+      let parts = [], on = false, raf = 0, last = 0, W = 0, H = 0, src = { x: 0, y: 0, hw: 200, hh: 150 };
+      const fit = () => { const b = rb(), d = Math.min(devicePixelRatio || 1, 2); if (canvas.width !== Math.round(b.width * d)) { W = b.width; H = b.height; canvas.width = b.width * d; canvas.height = b.height * d; ctx.setTransform(d, 0, 0, d, 0, 0); } };
+      const emit = (x, y, vx, vy, life, sz) => parts.push({ x, y, vx, vy, life, age: 0, sz, ph: Math.random() * 6.28 });
+      const frame = t => {
+        const dt = Math.min(.05, (t - last) / 1000 || .016); last = t;
+        ctx.clearRect(0, 0, W, H);
+        if (on) for (let k = 0; k < 2; k++) if (Math.random() < .55) emit(src.x + (Math.random() - .5) * src.hw * 2, src.y + (Math.random() * .7 - .3) * src.hh, (Math.random() - .5) * 14, -(16 + Math.random() * 38), 2.4 + Math.random() * 2.4, 4 + Math.random() * 9);
+        parts = parts.filter(p => p.age < p.life);
+        for (const p of parts) {
+          p.age += dt; p.x += (p.vx + Math.sin(p.age * 2 + p.ph) * 10) * dt; p.y += p.vy * dt; p.vy -= 8 * dt;
+          const k = p.age / p.life, s = p.sz * (1 - k * .3);
+          ctx.globalAlpha = Math.sin(Math.PI * k) * .9; ctx.drawImage(sprite, p.x - s / 2, p.y - s / 2, s, s);
+        }
+        ctx.globalAlpha = 1;
+        raf = (on || parts.length) ? requestAnimationFrame(frame) : 0;
+      };
+      const kick = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } };
+      return {
+        start(x, y, hw, hh) { if (REDUCED) return; fit(); src = { x, y, hw, hh }; on = true; kick(); },
+        stop() { on = false; },
+        burst(x, y, n, power = 1) {
+          if (REDUCED) return; fit();
+          for (let i = 0; i < n; i++) { const a = Math.random() * 6.28, v = (50 + Math.random() * 190) * power; emit(x, y, Math.cos(a) * v, Math.sin(a) * v - 30, .9 + Math.random() * 1.3, 5 + Math.random() * 11); }
+          kick();
+        },
+        clear() { on = false; parts = []; ctx.clearRect(0, 0, W, H); },
+      };
+    })();
+
+    const mk = (cls, css, html) => { const e = document.createElement('div'); e.className = cls; e.style.cssText = css; if (html) e.innerHTML = html; room.appendChild(e); return e; };
+    const fade = (el, to, ms) => el.animate([{ opacity: getComputedStyle(el).opacity }, { opacity: to }], { duration: D(ms), fill: 'forwards', easing: 'ease-out' }).finished;
+
+    function ignite(m, op, land) {
+      const b = rb(), sW = op.s * m.W, sH = op.s * m.H;
+      const fx = {
+        aura: mk('aura', `width:${sW * 3.4}px;height:${sW * 3.4}px;left:${b.width / 2 - sW * 1.7}px;top:${op.cy - sW * 1.7}px`),
+        rays: mk('rays', `width:${sW * 6.4}px;height:${sW * 6.4}px;left:${b.width / 2 - sW * 3.2}px;top:${op.cy - sW * 3.2}px`),
+      };
+      const S = clamp(240, m.W * 2.5, b.width * .72);
+      fx.runes = mk('runes', `width:${S}px;height:${S}px;left:${land.cx - S / 2}px;top:${land.cy + m.H * .1 - S / 2}px`, RUNES);
+      room.classList.add('magic');
+      fade(fx.aura, 1, 1500); fade(fx.rays, .9, 2200); fade(fx.runes, .95, 1800);
+      fx.aura.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }], { duration: 3400, direction: 'alternate', iterations: Infinity, easing: 'ease-in-out' });
+      cur.fx = fx;
+      magic.start(b.width / 2, op.cy, sW * .95, sH * .9);
+      magic.burst(b.width / 2, op.cy, 46, 1.25);
+    }
+    async function douse(fast) {
+      if (!cur || !cur.fx) return;
+      const fx = cur.fx; cur.fx = null;
+      magic.stop(); room.classList.remove('magic');
+      if (cur.floating) { const sp = cur.hero.querySelector('.hb-spread'), cs = getComputedStyle(sp).transform; cur.floating.cancel(); cur.floating = null; sp.animate([{ transform: cs }, { transform: 'none' }], { duration: D(600), easing: 'ease-out' }); }
+      await Promise.all(Object.values(fx).map(e => fade(e, 0, fast ? 200 : 800).then(() => e.remove())));
+    }
+    function levitate() {
+      const sp = cur.hero.querySelector('.hb-spread');
+      cur.floating = REDUCED ? null : sp.animate([
+        { transform: 'translateY(0) rotateX(0deg) rotateY(0deg)' },
+        { transform: 'translateY(-11px) rotateX(1.8deg) rotateY(-.9deg)', offset: .5 },
+        { transform: 'translateY(0) rotateX(0deg) rotateY(0deg)' }], { duration: 6400, iterations: Infinity, easing: 'ease-in-out' });
+    }
+
+    /* text appears as if being written: blur → glow → crisp, line by line */
+    function ink(pg, delay) {
+      if (!pg || REDUCED) return;
+      const plate = pg.querySelector('.plate');
+      [...pg.children, ...(plate ? plate.children : [])].filter(k => !k.classList.contains('pgno')).forEach((k, i) => k.animate([
+        { opacity: 0, transform: 'translateY(9px)', filter: 'blur(5px)', textShadow: '0 0 18px rgba(255,200,100,1)' },
+        { opacity: 1, filter: 'blur(0px)', textShadow: '0 0 12px rgba(255,190,90,.85)', offset: .55 },
+        { opacity: 1, transform: 'none', filter: 'blur(0px)', textShadow: '0 0 0 rgba(255,190,90,0)' }],
+      { duration: 950, delay: delay + i * 120, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' }));
+    }
+    const pageEls = p => [
+      p >= 1 ? cur.hero.querySelector(`.leaf[data-i="${p - 1}"] .back .pg`) : null,
+      p < 3 ? cur.hero.querySelector(`.leaf[data-i="${p}"] .front .pg`) : cur.hero.querySelector('.sp-base .pg'),
+    ];
+
     /* ── pull the book off the shelf ──────────────────────── */
     async function pullOut(i) {
       setState('busy');
@@ -295,19 +368,20 @@
       const lay = { cx: land.cx, cy: land.cy, rx: 58, ry: 0, rz: -5, s: m.lays };
 
       const cmW = clamp(64, box.width * .085, 120), feetY = slot.y + slot.h + 3;
-      cur.cmW = cmW;
-      const A = REDUCED ? null : spawnCM(false, cmW), B = REDUCED ? null : spawnCM(true, cmW * .94);
+      const cast = shuffle(['chip', 'quokka', 'wallaby']);
+      const A = REDUCED ? null : spawnCM(false, cmW, cast[0]), B = REDUCED ? null : spawnCM(true, cmW, cast[1]);
       await sleep(300);
 
       if (!REDUCED) {
-        cur.cms = [A, B]; cur.cmH = A.h;
-        const ax = slot.x - cmW * .76, bx = slot.x + slot.w - B.w * .24;
+        cur.cms = [A, B];
+        /* stand so each one's hand lands on the book's edge */
+        const ax = slot.x + 8 - A.w * A.hand, bx = slot.x + slot.w - 8 - B.w * (1 - B.hand);
         const at = (cm, x, o, ex) => cmF(cm, x, feetY, o, ex);
 
         /* 1 — they scamper in; the second one is a beat behind and a little slower */
-        const rA = runFrames(A, -cmW * 1.4, ax, feetY, { speed: .95, hop: 10 });
-        const rB = runFrames(B, box.width + cmW * .4, bx, feetY, { speed: .85, hop: 8 });
-        A.style.transform = cmT(A, -cmW * 1.4, feetY); B.style.transform = cmT(B, box.width + cmW * .4, feetY);
+        const rA = runFrames(A, -A.w * 1.4, ax, feetY, { speed: .95 });
+        const rB = runFrames(B, box.width + B.w * .4, bx, feetY, { speed: .85 });
+        A.style.transform = cmT(A, -A.w * 1.4, feetY); B.style.transform = cmT(B, box.width + B.w * .4, feetY);
         A.classList.add('run');
         await Promise.all([
           go(A, rA.fr, { duration: rA.dur, easing: 'linear' }),
@@ -378,7 +452,7 @@
         const flight = go(hero, tumbleFrames(m, from, land, base, apex), { duration: 1100, easing: 'linear' });
         const hopA = (async () => { await Promise.all([launchA, launchB]); A.classList.add('cheer'); B.classList.add('cheer');
           await Promise.all([
-            go(A, hopFrames(A, aX + 12, feetY, land.cx - hx - cmW * .6, yd, 1), { duration: 900, easing: 'linear' }),
+            go(A, hopFrames(A, aX + 12, feetY, land.cx - hx - A.w * .6, yd, 1), { duration: 900, easing: 'linear' }),
             sleep(60).then(() => go(B, hopFrames(B, bX - 12, feetY, land.cx + hx - B.w * .4, yd, -1), { duration: 900, easing: 'linear' })),
           ]); })();
         await Promise.all([flight, hopA]);
@@ -411,14 +485,14 @@
     /* ── chipmunks leaving / returning ───────────────────── */
     async function chipExit(leave) {
       if (!cur || REDUCED || !cur.cms.length) return;
-      const [A, B] = cur.cms, { cmW, m, land } = cur, box = rb();
+      const [A, B] = cur.cms, { m, land } = cur, box = rb();
       const feet = land.cy + m.H * .22;
-      const x0A = land.cx - m.W * .66 - cmW * .6, x0B = land.cx + m.W * .66 - B.w * .4;
-      const [fromA, xA] = leave ? [x0A, -cmW * 1.5] : [-cmW * 1.5, x0A];
-      const [fromB, xB] = leave ? [x0B, box.width + cmW * .5] : [box.width + cmW * .5, x0B];
+      const x0A = land.cx - m.W * .66 - A.w * .6, x0B = land.cx + m.W * .66 - B.w * .4;
+      const [fromA, xA] = leave ? [x0A, -A.w * 1.5] : [-A.w * 1.5, x0A];
+      const [fromB, xB] = leave ? [x0B, box.width + B.w * .5] : [box.width + B.w * .5, x0B];
       A.classList.remove('idle', 'look', 'cheer', 'reach'); B.classList.remove('idle', 'look', 'cheer', 'reach');
       A.classList.toggle('flip', leave); B.classList.toggle('flip', !leave);
-      const rA = runFrames(A, fromA, xA, feet, { speed: .85, hop: 9 }), rB = runFrames(B, fromB, xB, feet, { speed: .78, hop: 7 });
+      const rA = runFrames(A, fromA, xA, feet, { speed: .85 }), rB = runFrames(B, fromB, xB, feet, { speed: .78 });
       A.classList.add('run');
       await Promise.all([
         go(A, rA.fr, { duration: rA.dur, easing: 'linear' }),
@@ -458,6 +532,17 @@
       const cr = cur.hero.querySelector('.cast-r'), cl = cur.hero.querySelector('.cast-l');
       cr.animate(forward ? [{ opacity: 0 }, { opacity: .55, offset: .42 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: .55, offset: .6 }, { opacity: 0 }], { ...opt, easing: 'ease-in-out' });
       cl.animate(forward ? [{ opacity: 0 }, { opacity: 0, offset: .48 }, { opacity: .5, offset: .86 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: .5, offset: .14 }, { opacity: 0, offset: .55 }, { opacity: 0 }], { ...opt, easing: 'ease-in-out' });
+      /* the light show */
+      el.querySelectorAll('.shine').forEach(sh => sh.animate([{ opacity: 0, transform: 'translateX(-75%)' }, { opacity: 1, offset: .45 }, { opacity: 0, transform: 'translateX(75%)' }], { ...opt, easing: 'ease-in-out' }));
+      el.querySelectorAll('.face').forEach(f => f.animate([{ boxShadow: '0 0 0 0 rgba(255,214,140,0)' }, { boxShadow: '0 0 30px 5px rgba(255,214,140,.75)', offset: .5 }, { boxShadow: '0 0 0 0 rgba(255,214,140,0)' }], { ...opt, easing: 'ease-in-out' }));
+      cur.hero.querySelector('.gutter-glow').animate([
+        { opacity: 0, transform: 'translate(-50%,-50%) translateZ(14px) scale(.35)' },
+        { opacity: .95, transform: 'translate(-50%,-50%) translateZ(14px) scale(1.1)', offset: .45 },
+        { opacity: 0, transform: 'translate(-50%,-50%) translateZ(14px) scale(1.8)' }], { ...opt, easing: 'ease-in-out' });
+      const spineX = rb().width / 2, midY = (cur.pose && cur.pose.cy) || rb().height / 2;
+      setTimeout(() => magic.burst(spineX, midY, 30, 1), D(1250) * .42);
+      const nextPage = forward ? i + 1 : i;   // the state we land in after this turn
+      pageEls(nextPage).forEach(pg => ink(pg, D(1250) * .5));
       return el.animate(kf, opt).finished.then(() => { el.style.transform = L(a1, 0, 0); });
     }
 
@@ -490,6 +575,7 @@
         animateLeaf(0, true),
       ]);
       cur.pose = target; cur.page = 1;
+      ignite(m, target, cur.land); levitate();
       controls.classList.add('on'); syncControls();
       await exit;
       setState('open');
@@ -512,6 +598,7 @@
       hint.classList.add('off'); titlecard.classList.remove('on'); controls.classList.remove('on');
       const { hero, m, slot, slotEl, land } = cur;
       hero.classList.remove('ready');
+      const dousing = douse();
       const face = { cx: land.cx, cy: land.cy - m.H * .14, rx: 0, ry: 0, rz: 0, s: 1.04 };
       const lay = { cx: land.cx, cy: land.cy, rx: 58, ry: 0, rz: -5, s: m.lays };
       if (cur.page > 0) {
@@ -545,12 +632,14 @@
       slotEl.style.visibility = 'visible';
       slotEl.animate([{ transform: 'translateY(-10px)' }, { transform: 'translateY(3px)', offset: .45 }, { transform: 'translateY(-2px)', offset: .75 }, { transform: 'none' }], { duration: D(520), easing: 'ease-out' });
       hero.remove();
-      await walkOff;
+      await Promise.all([walkOff, dousing]);
       cleanup();
     }
 
     function cleanup() {
       if (cur) { cur.hero.remove(); cur.shadow && cur.shadow.remove(); cur.cms.forEach(c => c.remove()); cur.slotEl.style.visibility = 'visible'; }
+      if (cur && cur.fx) Object.values(cur.fx).forEach(e => e.remove());
+      magic.clear(); room.classList.remove('magic');
       actors.innerHTML = ''; cur = null;
       room.classList.remove('cinema');
       controls.classList.remove('on'); titlecard.classList.remove('on');

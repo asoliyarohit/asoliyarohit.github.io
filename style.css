@@ -396,30 +396,71 @@ section { padding: clamp(5rem, 11vw, 10rem) 0; position: relative; }
 .hint.off { opacity: 0; }
 .hint { color: var(--fg); text-shadow: 0 1px 8px #000; }
 
-/* chipmunks */
-.cm { position: absolute; left: 0; top: 0; z-index: 7; width: var(--cmw); aspect-ratio: 4 / 3; will-change: transform; transform-origin: 50% 100%; }
-.cm svg { width: 100%; height: 100%; overflow: visible; transform-origin: 50% 90%; transition: transform .25s var(--ease); }
+/* ── magic ── */
+.motes { position: absolute; inset: 0; z-index: 9; width: 100%; height: 100%; pointer-events: none; }
+.aura { position: absolute; z-index: 4; pointer-events: none; border-radius: 50%; opacity: 0;
+  background: radial-gradient(closest-side, rgba(255,214,140,.5), rgba(255,170,90,.2) 45%, rgba(120,190,255,.1) 68%, transparent 82%); }
+.rays { position: absolute; z-index: 4; pointer-events: none; border-radius: 50%; opacity: 0; animation: spin 80s linear infinite;
+  background: repeating-conic-gradient(from 0deg, rgba(255,226,160,.2) 0 2.5deg, transparent 2.5deg 14deg);
+  -webkit-mask-image: radial-gradient(closest-side, #000 12%, transparent 100%); mask-image: radial-gradient(closest-side, #000 12%, transparent 100%); }
+.runes { position: absolute; z-index: 2; pointer-events: none; opacity: 0; transform: perspective(900px) rotateX(62deg); }
+.runes svg { width: 100%; height: 100%; animation: spin 110s linear infinite; filter: drop-shadow(0 0 4px rgba(255,210,120,.95)) drop-shadow(0 0 14px rgba(255,170,80,.55)); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.room.magic .vignette { opacity: 1; background: radial-gradient(ellipse at 50% 52%, rgba(10,18,40,0) 18%, rgba(3,6,16,.9) 100%); }
+.room.magic .lamp { opacity: .2; }
+.gutter-glow { position: absolute; left: 0; top: 50%; width: calc(var(--W) * 1.5); height: calc(var(--H) * 1.1); transform: translate(-50%, -50%) translateZ(14px); border-radius: 50%; opacity: 0; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255,240,200,.95), rgba(255,200,110,.55) 35%, transparent 72%); }
+.shine { position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: 0; background: linear-gradient(105deg, transparent 36%, rgba(255,238,190,.6) 50%, transparent 64%); }
+
+/* the helpers (chipmunk, quokka, wallaby) */
+.cm { position: absolute; left: 0; top: 0; z-index: 7; width: var(--cmw); will-change: transform; transform-origin: 50% 100%; }
+.cm svg { width: 100%; height: 100%; overflow: visible; }
 .cm.flip svg { transform: scaleX(-1); }
-.cm .arm { transform-origin: 104px 84px; transition: transform .3s var(--ease); }
-.cm.reach .arm { transform: rotate(-62deg); }
+.cm .arm { transition: transform .3s var(--ease); }
+.cm.reach .arm { transform: rotate(var(--reach, -62deg)); }
 .cm.cheer .arm { transform: rotate(-150deg); }
-.cm .tail { transform-origin: 58px 82px; animation: tailIdle 1.8s ease-in-out infinite alternate; }
-.cm .head { transform-origin: 100px 76px; transition: transform .45s var(--ease); }
+.cm .head { transition: transform .45s var(--ease); }
 .cm.look .head { transform: rotate(-7deg) translateY(1px); }
-.cm.idle .body { animation: breathe 2.4s ease-in-out infinite alternate; transform-origin: 74px 100px; }
-.cm.idle .head { animation: peer 5.2s ease-in-out infinite; }
 .cm .eye { transform-box: fill-box; transform-origin: center; animation: blink 4s infinite; }
-.cm .legf { transform-origin: 96px 90px; } .cm .legb { transform-origin: 50px 90px; }
-.cm.run .body { animation: bob .22s ease-in-out infinite alternate; }
-.cm.run .legf { animation: legA .22s ease-in-out infinite alternate; }
-.cm.run .legb { animation: legA .22s ease-in-out infinite alternate-reverse; }
-.cm.run .tail { animation: tailRun .22s ease-in-out infinite alternate; }
-.cm.run .head { animation: bob .22s ease-in-out infinite alternate-reverse; }
-@keyframes breathe { from { transform: scaleY(1); } to { transform: scaleY(1.035); } }
+.cm .tail { animation: tailIdle 1.8s ease-in-out infinite alternate; }
+.cm.idle .body { animation: breathe 2.4s ease-in-out infinite alternate; }
+.cm.idle .head { animation: peer 5.2s ease-in-out infinite; }
+
+.sp-chip .arm { transform-origin: 104px 88px; } .sp-chip .tail { transform-origin: 58px 82px; } .sp-chip .head { transform-origin: 100px 76px; }
+.sp-chip .legf { transform-origin: 96px 90px; } .sp-chip .legb { transform-origin: 50px 90px; } .sp-chip.idle .body, .sp-chip .body { transform-origin: 74px 108px; }
+.sp-quokka { --reach: -40deg; }
+.sp-quokka .arm { transform-origin: 84px 86px; } .sp-quokka .tail { transform-origin: 44px 124px; } .sp-quokka .head { transform-origin: 84px 76px; }
+.sp-quokka .legf { transform-origin: 94px 124px; } .sp-quokka .legb { transform-origin: 62px 122px; } .sp-quokka .body { transform-origin: 76px 140px; }
+.sp-wallaby { --reach: -44deg; }
+.sp-wallaby .arm { transform-origin: 86px 100px; } .sp-wallaby .tail { transform-origin: 56px 158px; } .sp-wallaby .head { transform-origin: 90px 90px; }
+.sp-wallaby .legf { transform-origin: 88px 150px; } .sp-wallaby .legb { transform-origin: 64px 146px; } .sp-wallaby .body { transform-origin: 78px 176px; }
+
+/* chipmunk scurries */
+.sp-chip.run .body { animation: bob .22s ease-in-out infinite alternate; }
+.sp-chip.run .legf { animation: legA .22s ease-in-out infinite alternate; }
+.sp-chip.run .legb { animation: legA .22s ease-in-out infinite alternate-reverse; }
+.sp-chip.run .tail { animation: tailRun .22s ease-in-out infinite alternate; }
+.sp-chip.run .head { animation: bob .22s ease-in-out infinite alternate-reverse; }
+/* quokka waddles */
+.sp-quokka.run .body { animation: waddle .3s ease-in-out infinite alternate; }
+.sp-quokka.run .legf { animation: legA .3s ease-in-out infinite alternate; }
+.sp-quokka.run .legb { animation: legA .3s ease-in-out infinite alternate-reverse; }
+.sp-quokka.run .head { animation: bob .3s ease-in-out infinite alternate-reverse; }
+.sp-quokka.run .tail { animation: tailRun .3s ease-in-out infinite alternate; }
+/* wallaby bounds, both feet together, tail pushing */
+.sp-wallaby.run .legf, .sp-wallaby.run .legb { animation: tuck .34s ease-in-out infinite alternate; }
+.sp-wallaby.run .tail { animation: tailPush .34s ease-in-out infinite alternate; }
+.sp-wallaby.run .head { animation: bob .34s ease-in-out infinite alternate-reverse; }
+.sp-wallaby.run .arm { transform: rotate(38deg); }
+
+@keyframes breathe { from { transform: scaleY(1); } to { transform: scaleY(1.03); } }
 @keyframes peer { 0%, 38%, 100% { transform: rotate(0); } 46%, 60% { transform: rotate(-8deg); } 74%, 88% { transform: rotate(5deg); } }
-@keyframes bob { from { transform: translateY(0); } to { transform: translateY(-4px); } }
-@keyframes legA { from { transform: rotate(-30deg); } to { transform: rotate(30deg); } }
+@keyframes bob { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+@keyframes waddle { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+@keyframes legA { from { transform: rotate(-26deg); } to { transform: rotate(26deg); } }
+@keyframes tuck { from { transform: rotate(14deg); } to { transform: rotate(-24deg); } }
 @keyframes tailRun { from { transform: rotate(-6deg); } to { transform: rotate(8deg); } }
+@keyframes tailPush { from { transform: rotate(6deg); } to { transform: rotate(-12deg); } }
 @keyframes tailIdle { from { transform: rotate(-5deg); } to { transform: rotate(7deg); } }
 @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
 
